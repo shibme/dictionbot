@@ -1,0 +1,113 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>me.shib.java.app</groupId>
+	<artifactId>dictionbot</artifactId>
+	<version>1.0.1</version>
+	<name>Content Request Telegram Bot</name>
+	<description>A telegram bot to request for content based on IMDB URL</description>
+	<url>https://github.com/shiblymeeran/dictionbot</url>
+
+	<issueManagement>
+		<url>https://github.com/shiblymeeran/dictionbot/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+	<licenses>
+		<license>
+			<name>GNU General Public License, version 2</name>
+			<url>https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<scm>
+		<url>https://github.com/shiblymeeran/dictionbot</url>
+		<connection>scm:git:https://github.com/shiblymeeran/dictionbot.git</connection>
+		<developerConnection>scm:git:shiblymeeran@github.com:shiblymeeran/dictionbot.git</developerConnection>
+	</scm>
+
+	<developers>
+		<developer>
+			<email>shibly.meeran@gmail.com</email>
+			<name>Shibly Meeran</name>
+			<url>https://github.com/shiblymeeran</url>
+			<id>shiblymeeran</id>
+		</developer>
+	</developers>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<build>
+		<sourceDirectory>src</sourceDirectory>
+		<plugins>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.3</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<!-- get all project dependencies -->
+					<descriptorRefs>
+						<descriptorRef>jar-with-dependencies</descriptorRef>
+					</descriptorRefs>
+					<!-- MainClass in mainfest make a executable jar -->
+					<archive>
+						<manifest>
+							<mainClass>me.shib.java.app.telegram.bot.dictionbot.StartDictionBot</mainClass>
+						</manifest>
+					</archive>
+
+				</configuration>
+				<executions>
+					<execution>
+						<id>make-assembly</id>
+						<!-- bind to the packaging phase -->
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<repositories>
+		<repository>
+			<id>rita</id>
+			<name>RiTa Wordnet</name>
+			<url>http://resources.smile.deri.ie/maven-repository</url>
+		</repository>
+	</repositories>
+
+	<dependencies>
+		<dependency>
+			<groupId>me.shib.java.lib</groupId>
+			<artifactId>easy-tbot</artifactId>
+			<version>0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>wordnet</groupId>
+			<artifactId>wordnet-rita</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+		<dependency>
+			<groupId>wordnet</groupId>
+			<artifactId>wordnet-support</artifactId>
+			<version>0.0.1</version>
+		</dependency>
+	</dependencies>
+
+</project>

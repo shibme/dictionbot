@@ -1,12 +1,13 @@
-# DictionBot
-The [@DictionBot](https://telegram.me/DictionBot) of Telegram - A simple dictionary to find what any English word means.
+# dictionBot
+The [@DictionBot](https://telegram.me/dictionbot) of Telegram - A simple English dictionary with almost every word in the vocabulary.
 
-### Downloads [(Releases)](https://github.com/shiblymeeran/DictionBot/releases) ###
-* DictionBot Executable JAR with Config file
+### Downloads [(Releases)](https://github.com/shiblymeeran/dictionbot/releases) ###
+* dictionbot Executable JAR with Config file
 * RiTa WordNet Dictionary Library
 
 ### Dependencies ###
-* [TBot](https://github.com/shiblymeeran/TBot)
+* [easy-tbot](https://github.com/shiblymeeran/easy-tbot)
+* RiTa WordNet Dictionary Library
 
 ### References ###
 * [RiTa WordNet](https://rednoise.org/rita/reference/index.php)

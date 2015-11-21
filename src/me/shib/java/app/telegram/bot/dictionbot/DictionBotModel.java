@@ -1,17 +1,17 @@
-package me.shib.java.telegram.bot.dictionbot;
+package me.shib.java.app.telegram.bot.dictionbot;
 
 import java.io.IOException;
 import java.util.Random;
 
-import me.shib.java.dictionary.service.DictionService;
-import me.shib.java.dictionary.service.DictionWord;
-import me.shib.java.telegram.bot.service.TelegramBotService;
-import me.shib.java.telegram.bot.service.TelegramBotService.ChatAction;
-import me.shib.java.telegram.bot.types.ChatId;
-import me.shib.java.telegram.bot.types.Message;
-import me.shib.java.telegram.bot.types.ParseMode;
-import me.shib.java.telegram.bot.types.User;
-import me.shib.java.telegram.easybot.framework.TBotModel;
+import me.shib.java.lib.dictionary.service.DictionService;
+import me.shib.java.lib.dictionary.service.DictionWord;
+import me.shib.java.lib.telegram.bot.easybot.TBotModel;
+import me.shib.java.lib.telegram.bot.service.TelegramBotService;
+import me.shib.java.lib.telegram.bot.service.TelegramBotService.ChatAction;
+import me.shib.java.lib.telegram.bot.types.ChatId;
+import me.shib.java.lib.telegram.bot.types.Message;
+import me.shib.java.lib.telegram.bot.types.ParseMode;
+import me.shib.java.lib.telegram.bot.types.User;
 
 public class DictionBotModel implements TBotModel {
 	

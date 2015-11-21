@@ -1,9 +1,9 @@
-package me.shib.java.telegram.bot.dictionbot;
+package me.shib.java.app.telegram.bot.dictionbot;
 
 import java.io.File;
 
-import me.shib.java.telegram.easybot.framework.TBotConfig;
-import me.shib.java.telegram.easybot.framework.TBotWorker;
+import me.shib.java.lib.telegram.bot.easybot.TBotConfig;
+import me.shib.java.lib.telegram.bot.easybot.TBotWorker;
 
 public class StartDictionBot {
 	

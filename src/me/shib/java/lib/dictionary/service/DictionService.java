@@ -1,4 +1,4 @@
-package me.shib.java.dictionary.service;
+package me.shib.java.lib.dictionary.service;
 
 import java.util.ArrayList;
 
