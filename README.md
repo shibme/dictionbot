@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/shiblymeeran/dictionbot.svg)](https://travis-ci.org/shiblymeeran/dictionbot)
-# dictionbot
+# dictionbot #
 The [@DictionBot](https://telegram.me/dictionbot) of Telegram - A simple English dictionary with almost every word in the vocabulary.
 
 ### Downloads [(Releases)](https://github.com/shiblymeeran/dictionbot/releases) ###
