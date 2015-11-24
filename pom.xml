@@ -5,9 +5,9 @@
 
 	<groupId>me.shib.java.app</groupId>
 	<artifactId>dictionbot</artifactId>
-	<version>1.0.1</version>
-	<name>Content Request Telegram Bot</name>
-	<description>A telegram bot to request for content based on IMDB URL</description>
+	<version>1.0.2</version>
+	<name>DictionBot</name>
+	<description>Telegram's @DictionBot - A simple English dictionary with almost every word in the English vocabulary</description>
 	<url>https://github.com/shiblymeeran/dictionbot</url>
 
 	<issueManagement>
@@ -92,7 +92,7 @@
 		<dependency>
 			<groupId>me.shib.java.lib</groupId>
 			<artifactId>easy-tbot</artifactId>
-			<version>0.8</version>
+			<version>0.8.1</version>
 		</dependency>
 		<dependency>
 			<groupId>wordnet</groupId>
