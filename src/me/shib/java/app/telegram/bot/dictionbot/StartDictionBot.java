@@ -10,7 +10,7 @@ public class StartDictionBot {
 	private static final int threadCount = 7;
 	
 	public static void main(String[] args) throws InterruptedException {
-		TBotConfig tbConfig = TBotConfig.getFileConfig(new File("DictionBotConfig.json"));
+		TBotConfig tbConfig = TBotConfig.getFileConfig(new File("dictionbot-config.json"));
 		TBotWorker[] botWorkers = new TBotWorker[threadCount];
 		for(int i = 0; i < threadCount; i++) {
 			botWorkers[i] = new TBotWorker(new DictionBotModel(), tbConfig);

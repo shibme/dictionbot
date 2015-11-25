@@ -5,7 +5,7 @@ Telegram's [@DictionBot](https://telegram.me/dictionbot) - A simple English dict
 [![Build Status](https://travis-ci.org/shiblymeeran/dictionbot.svg)](https://travis-ci.org/shiblymeeran/dictionbot)
 
 ### Configuration for Bot Owners ###
-Create a file named **DictionBotConfig.json** and add the following:
+Create a file named **dictionbot-config.json** and add the following:
 
 ```json
 {
