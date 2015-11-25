@@ -4,9 +4,20 @@ Telegram's [@DictionBot](https://telegram.me/dictionbot) - A simple English dict
 ### Build Status ###
 [![Build Status](https://travis-ci.org/shiblymeeran/dictionbot.svg)](https://travis-ci.org/shiblymeeran/dictionbot)
 
+### Configuration for Bot Owners ###
+Create a file named **DictionBotConfig.json** and add the following:
+
+```json
+{
+	"botApiToken": "YourBotApiTokenGoesHere",
+	"commandList": ["/start","/help","/status","/scr"],
+	"adminIdList": [1,2,3,4],
+	"reportIntervalInSeconds": 86400
+}
+```
+
 ### Downloads [(Releases)](https://github.com/shiblymeeran/dictionbot/releases) ###
-* dictionbot Executable JAR with Config file
-* RiTa WordNet Dictionary Library
+* DictionBot Executable JAR **(jar-with-dependencies)**
 
 ### Dependencies ###
 * [easy-tbot](https://github.com/shiblymeeran/easy-tbot)
