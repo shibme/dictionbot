@@ -15,9 +15,9 @@ Create a file named **DictionBotConfig.json** and add the following:
 	"reportIntervalInSeconds": 86400
 }
 ```
-**commandList** - The list of supported commands.
-**adminIdList** - Use [@GO_Robot](https://telegram.me/GO_Robot) to find your telegram ID and add it to admin list.
-**reportIntervalInSeconds** - The intervals at which the Bot reports the Admins the status (To know if it is alive). 
+* **commandList** - The list of supported commands.
+* **adminIdList** - Use [@GO_Robot](https://telegram.me/GO_Robot) to find your telegram ID and add it to admin list.
+* **reportIntervalInSeconds** - The intervals at which the Bot reports the Admins the status (To know if it is alive). 
 
 ### Downloads [(Releases)](https://github.com/shiblymeeran/dictionbot/releases) ###
 * DictionBot Executable JAR **(jar-with-dependencies)**
