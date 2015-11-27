@@ -29,10 +29,6 @@ public class DictionBotModel implements TBotModel {
 	public DictionBotModel() {
 		dictionService = new DictionService();
 	}
-	
-	public String getStatusMessage() {
-		return null;
-	}
 
 	public Message onCommand(TelegramBotService tbs, Message msg) {
 		String text = msg.getText();
@@ -98,6 +94,11 @@ public class DictionBotModel implements TBotModel {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+
+	public Message sendStatusMessage(TelegramBotService tBotService, long chatId) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 

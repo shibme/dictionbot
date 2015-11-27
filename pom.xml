@@ -5,7 +5,7 @@
 
 	<groupId>me.shib.java.app</groupId>
 	<artifactId>dictionbot</artifactId>
-	<version>1.0.4</version>
+	<version>1.1.1</version>
 	<name>DictionBot</name>
 	<description>Telegram's @DictionBot - A simple English dictionary with almost every word in the English vocabulary</description>
 	<url>https://github.com/shiblymeeran/dictionbot</url>
@@ -63,7 +63,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>me.shib.java.app.telegram.bot.dictionbot.StartDictionBot</mainClass>
+							<mainClass>me.shib.java.lib.telegram.bot.run.Launcher</mainClass>
 						</manifest>
 					</archive>
 				</configuration>
@@ -131,7 +131,7 @@
 		<dependency>
 			<groupId>me.shib.java.lib</groupId>
 			<artifactId>easy-tbot</artifactId>
-			<version>0.8.2</version>
+			<version>0.8.5</version>
 		</dependency>
 		<dependency>
 			<groupId>wordnet</groupId>
