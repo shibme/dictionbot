@@ -1,10 +1,10 @@
 [
 	{
 		"botLauncherclassName": "me.shib.java.app.telegram.bot.dictionbot.DictionBotLauncher",
-		"botApiToken": "90055003:AAFHtAFHa4YvyLGQC1xyjjUsdcJab8HexR4",
+		"botApiToken": "YourBotApiTokenGoesHere",
 		"commandList": ["/start","/help","/status","/scr"],
 		"threadCount": 7,
-		"adminIdList": [32823478],
+		"adminIdList": [000000000, 000000000],
 		"reportIntervalInSeconds": 86400
 	}
 ]
