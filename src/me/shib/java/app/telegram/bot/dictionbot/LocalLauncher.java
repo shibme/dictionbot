@@ -27,7 +27,7 @@ public class LocalLauncher {
 			Launcher.launchBots(singleBotConfigAsList);
 		}
 		else {
-			System.out.println("Unable to find the required botLauncherclassName: \"" + DictionBotLauncher.class.getName() + "\"");
+			System.out.println("Unable to find the required botLauncherclassName: \"" + thisBotlauncherClass.getName() + "\"");
 		}
 	}
 }
