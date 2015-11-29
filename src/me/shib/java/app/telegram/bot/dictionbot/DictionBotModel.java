@@ -6,8 +6,8 @@ import java.util.Random;
 import me.shib.java.lib.dictionary.service.DictionService;
 import me.shib.java.lib.dictionary.service.DictionWord;
 import me.shib.java.lib.telegram.bot.easybot.TBotModel;
-import me.shib.java.lib.telegram.bot.service.TelegramBotService;
-import me.shib.java.lib.telegram.bot.service.TelegramBotService.ChatAction;
+import me.shib.java.lib.telegram.bot.service.TelegramBot;
+import me.shib.java.lib.telegram.bot.service.TelegramBot.ChatAction;
 import me.shib.java.lib.telegram.bot.types.ChatId;
 import me.shib.java.lib.telegram.bot.types.Message;
 import me.shib.java.lib.telegram.bot.types.ParseMode;
@@ -30,7 +30,7 @@ public class DictionBotModel implements TBotModel {
 		dictionService = new DictionService();
 	}
 
-	public Message onCommand(TelegramBotService tbs, Message msg) {
+	public Message onCommand(TelegramBot tbs, Message msg) {
 		String text = msg.getText();
 		if(text != null) {
 			if(text.equalsIgnoreCase("/start") || text.equalsIgnoreCase("/help")) {
@@ -47,7 +47,7 @@ public class DictionBotModel implements TBotModel {
 		return null;
 	}
 
-	public Message onMessageFromAdmin(TelegramBotService tbs, Message msg) {
+	public Message onMessageFromAdmin(TelegramBot tbs, Message msg) {
 		return null;
 	}
 	
@@ -68,7 +68,7 @@ public class DictionBotModel implements TBotModel {
 		return null;
 	}
 	
-	public Message onReceivingMessage(TelegramBotService tbs, Message msg) {
+	public Message onReceivingMessage(TelegramBot tbs, Message msg) {
 		try {
 			String text = msg.getText();
 			long sender = msg.getChat().getId();
@@ -97,7 +97,7 @@ public class DictionBotModel implements TBotModel {
 		return null;
 	}
 
-	public Message sendStatusMessage(TelegramBotService tBotService, long chatId) {
+	public Message sendStatusMessage(TelegramBot tBotService, long chatId) {
 		// TODO Auto-generated method stub
 		return null;
 	}
