@@ -27,7 +27,7 @@ Create a file named **easy-bot-config.json** and add the following:
 * **reportIntervalInSeconds** - The intervals at which the Bot reports the Admins the status (To know if it is alive). 
 
 ### Downloads [(Releases)](https://github.com/shiblymeeran/dictionbot/releases) ###
-* DictionBot Executable JAR **(jar-with-dependencies)**
+* DictionBot Executable JAR **(DictionBot.jar)**
 
 ### Dependencies ###
 * [easy-tbot](https://github.com/shiblymeeran/easy-tbot)
