@@ -26,11 +26,11 @@ Create a file named **easy-bot-config.json** and add the following:
 * **adminIdList** - Use [@GO_Robot](https://telegram.me/GO_Robot) to find your telegram ID and add it to admin list.
 * **reportIntervalInSeconds** - The intervals at which the Bot reports the Admins the status (To know if it is alive). 
 
-### Downloads [(Releases)](https://github.com/shiblymeeran/dictionbot/releases) ###
+### Downloads [(Releases)](https://github.com/shibme/dictionbot/releases) ###
 * DictionBot Executable JAR **(DictionBot.jar)**
 
 ### Dependencies ###
-* [easy-tbot](https://github.com/shiblymeeran/easy-tbot)
+* [easy-tbot](https://github.com/shibme/easy-tbot)
 * RiTa WordNet Dictionary Library
 
 ### References ###
