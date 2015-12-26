@@ -2,7 +2,7 @@
 Telegram's [@DictionBot](https://telegram.me/dictionbot) - A simple English dictionary with almost every word in the English vocabulary
 
 ### Build Status ###
-[![Build Status](https://travis-ci.org/shiblymeeran/dictionbot.svg)](https://travis-ci.org/shiblymeeran/dictionbot)
+[![Build Status](https://travis-ci.org/shibme/dictionbot.svg)](https://travis-ci.org/shibme/dictionbot)
 
 ### Configuration for Bot Owners ###
 Create a file named **easy-bot-config.json** and add the following:
