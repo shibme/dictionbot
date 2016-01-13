@@ -5,7 +5,7 @@
 
 	<groupId>me.shib.java.app</groupId>
 	<artifactId>dictionbot</artifactId>
-	<version>1.2.0</version>
+	<version>1.2.1</version>
 	<name>DictionBot</name>
 	<description>Telegram's @DictionBot - A simple English dictionary with almost every word in the English vocabulary</description>
 	<url>https://github.com/shiblymeeran/dictionbot</url>
@@ -65,7 +65,7 @@
 					</descriptorRefs>
 					<archive>
 						<manifest>
-							<mainClass>me.shib.java.lib.telegram.bot.run.Launcher</mainClass>
+							<mainClass>me.shib.java.lib.telegram.bot.run.LaunchBots</mainClass>
 						</manifest>
 					</archive>
 				</configuration>

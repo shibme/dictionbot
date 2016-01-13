@@ -126,8 +126,10 @@ public class DictionBotModel extends BotModel {
                 for(int i = 0; i < descriptions.size(); i++) {
                     String id = "desc-" + i;
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
-                    String text = wordToFind + " - " + title;
-                    results[i] = new InlineQueryResultArticle(id, title, text);
+                    String text = "*" + wordToFind + "* - *" + descriptions.get(i).getWordType() + "* - " + descriptions.get(i).getDescription();
+                    InlineQueryResultArticle article = new InlineQueryResultArticle(id, title, text);
+                    article.setParse_mode(ParseMode.Markdown);
+                    results[i] = article;
                 }
                 try {
                     return bot.answerInlineQuery(query.getId(), results);
@@ -140,7 +142,6 @@ public class DictionBotModel extends BotModel {
     }
 
     public Message sendStatusMessage(TelegramBot bot, long chatId) {
-        // TODO Auto-generated method stub
         return null;
     }
 
