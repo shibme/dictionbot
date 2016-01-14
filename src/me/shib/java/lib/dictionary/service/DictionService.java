@@ -26,7 +26,7 @@ public class DictionService {
     }
 
     private PosSenseIds[] getPosSenseIds(String word) {
-        ArrayList<PosSenseIds> posSenseIdsList = new ArrayList<PosSenseIds>();
+        ArrayList<PosSenseIds> posSenseIdsList = new ArrayList<>();
         String[] posList = wordnet.getPos(word);
         for (String p : posList) {
             PosSenseIds posIds = new PosSenseIds(getPos(p));
@@ -64,7 +64,7 @@ public class DictionService {
         noun("n"), verb("v"), adjective("a"), adverb("r");
         private String posStr;
 
-        private POS(String posStr) {
+        POS(String posStr) {
             this.posStr = posStr;
         }
 

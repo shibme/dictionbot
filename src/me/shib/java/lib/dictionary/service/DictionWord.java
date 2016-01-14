@@ -7,10 +7,11 @@ public class DictionWord {
     private String word;
     private ArrayList<DictionDesc> descriptions;
     private ArrayList<String> hyponyms;
+
     public DictionWord(String word) {
         this.word = word;
-        descriptions = new ArrayList<DictionDesc>();
-        hyponyms = new ArrayList<String>();
+        descriptions = new ArrayList<>();
+        hyponyms = new ArrayList<>();
     }
 
     protected void addDescription(String wordType, String description) {
@@ -36,13 +37,13 @@ public class DictionWord {
     public String toString() {
         StringBuilder dictionBuilder = new StringBuilder();
         if (descriptions.size() > 0) {
-            dictionBuilder.append(word + ":\n\nDescription:\n");
-            for (int i = 0; i < descriptions.size(); i++) {
-                dictionBuilder.append(descriptions.get(i).wordType + " - " + descriptions.get(i).description + "\n");
+            dictionBuilder.append(word).append(":\n\nDescription:\n");
+            for (DictionDesc description : descriptions) {
+                dictionBuilder.append(description.wordType).append(" - ").append(description.description).append("\n");
             }
         }
         if (hyponyms.size() > 0) {
-            dictionBuilder.append("\nRelated to \"" + word + "\":\n");
+            dictionBuilder.append("\nRelated to \"").append(word).append("\":\n");
             for (int i = 0; i < hyponyms.size(); i++) {
                 dictionBuilder.append(hyponyms.get(i));
                 if (i < (hyponyms.size() - 1)) {

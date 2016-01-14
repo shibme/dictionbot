@@ -23,16 +23,15 @@ public class DictionBotModel extends BotModel {
     private static final String[] developerName = {"Shibly", "Meeran"};
 
     private DictionService dictionService;
+    private TelegramBot bot;
 
     public DictionBotModel() {
         dictionService = new DictionService();
+        bot = getBot();
     }
 
     private boolean isValidText(String text) {
-        if (text != null) {
-            return text.matches("^[A-Za-z0-9]+$");
-        }
-        return false;
+        return text != null && text.matches("^[A-Za-z0-9]+$");
     }
 
     private String getProperName(User user) {
@@ -50,7 +49,7 @@ public class DictionBotModel extends BotModel {
         return "";
     }
 
-    public Message onCommand(TelegramBot bot, Message msg) {
+    public Message onCommand(Message msg) {
         String text = msg.getText();
         if (text != null) {
             if (text.equalsIgnoreCase("/start") || text.equalsIgnoreCase("/help")) {
@@ -67,7 +66,7 @@ public class DictionBotModel extends BotModel {
         return null;
     }
 
-    public Message onMessageFromAdmin(TelegramBot bot, Message msg) {
+    public Message onMessageFromAdmin(Message msg) {
         return null;
     }
 
@@ -88,7 +87,7 @@ public class DictionBotModel extends BotModel {
         return null;
     }
 
-    public Message onReceivingMessage(TelegramBot bot, Message msg) {
+    public Message onReceivingMessage(Message msg) {
         try {
             String text = msg.getText();
             long sender = msg.getChat().getId();
@@ -115,7 +114,7 @@ public class DictionBotModel extends BotModel {
     }
 
     @Override
-    public boolean onInlineQuery(TelegramBot bot, InlineQuery query) {
+    public boolean onInlineQuery(InlineQuery query) {
         String wordToFind = query.getQuery();
         if ((wordToFind != null) && (wordToFind.split("\\s+").length == 1) && (isValidText(wordToFind))) {
             DictionWord wordMatch = dictionService.getDictionWord(wordToFind);
@@ -140,7 +139,7 @@ public class DictionBotModel extends BotModel {
         return false;
     }
 
-    public Message sendStatusMessage(TelegramBot bot, long chatId) {
+    public Message sendStatusMessage(long chatId) {
         return null;
     }
 
