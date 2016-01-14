@@ -1,6 +1,5 @@
 package me.shib.java.app.telegram.bot.dictionbot;
 
-import me.shib.java.lib.common.utils.JsonLib;
 import me.shib.java.lib.dictionary.service.DictionService;
 import me.shib.java.lib.dictionary.service.DictionWord;
 import me.shib.java.lib.telegram.bot.easybot.BotModel;
@@ -120,13 +119,13 @@ public class DictionBotModel extends BotModel {
         String wordToFind = query.getQuery();
         if ((wordToFind != null) && (wordToFind.split("\\s+").length == 1) && (isValidText(wordToFind))) {
             DictionWord wordMatch = dictionService.getDictionWord(wordToFind);
-            if(wordMatch != null) {
+            if (wordMatch != null) {
                 ArrayList<DictionWord.DictionDesc> descriptions = wordMatch.getDescriptions();
                 InlineQueryResult[] results = new InlineQueryResult[descriptions.size()];
-                for(int i = 0; i < descriptions.size(); i++) {
+                for (int i = 0; i < descriptions.size(); i++) {
                     String id = "desc-" + i;
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
-                    String text = "*" + wordToFind + "* - *" + descriptions.get(i).getWordType() + "* - " + descriptions.get(i).getDescription();
+                    String text = "*" + wordToFind + "* _(" + descriptions.get(i).getWordType() + ")_ - " + descriptions.get(i).getDescription();
                     InlineQueryResultArticle article = new InlineQueryResultArticle(id, title, text);
                     article.setParse_mode(ParseMode.Markdown);
                     results[i] = article;

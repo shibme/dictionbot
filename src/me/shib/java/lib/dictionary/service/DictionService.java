@@ -1,33 +1,11 @@
 package me.shib.java.lib.dictionary.service;
 
-import java.util.ArrayList;
-
 import rita.wordnet.RiWordnet;
+
+import java.util.ArrayList;
 
 
 public class DictionService {
-
-    private enum POS {
-        noun("n"), verb("v"), adjective("a"), adverb("r");
-        private String posStr;
-
-        private POS(String posStr) {
-            this.posStr = posStr;
-        }
-
-        private String toPosStr() {
-            return posStr;
-        }
-    }
-
-    private class PosSenseIds {
-        private POS pos;
-        private int[] ids;
-
-        private PosSenseIds(POS pos) {
-            this.pos = pos;
-        }
-    }
 
     private RiWordnet wordnet;
 
@@ -80,6 +58,28 @@ public class DictionService {
             }
         }
         return dictWord;
+    }
+
+    private enum POS {
+        noun("n"), verb("v"), adjective("a"), adverb("r");
+        private String posStr;
+
+        private POS(String posStr) {
+            this.posStr = posStr;
+        }
+
+        private String toPosStr() {
+            return posStr;
+        }
+    }
+
+    private class PosSenseIds {
+        private POS pos;
+        private int[] ids;
+
+        private PosSenseIds(POS pos) {
+            this.pos = pos;
+        }
     }
 
 }

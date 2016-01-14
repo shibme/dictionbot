@@ -4,28 +4,9 @@ import java.util.ArrayList;
 
 public class DictionWord {
 
-    public class DictionDesc {
-        private String wordType;
-        private String description;
-
-        private DictionDesc(String wordType, String description) {
-            this.wordType = wordType;
-            this.description = description;
-        }
-
-        public String getWordType() {
-            return wordType;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-    }
-
     private String word;
     private ArrayList<DictionDesc> descriptions;
     private ArrayList<String> hyponyms;
-
     public DictionWord(String word) {
         this.word = word;
         descriptions = new ArrayList<DictionDesc>();
@@ -73,6 +54,24 @@ public class DictionWord {
             return null;
         }
         return dictionBuilder.toString();
+    }
+
+    public class DictionDesc {
+        private String wordType;
+        private String description;
+
+        private DictionDesc(String wordType, String description) {
+            this.wordType = wordType;
+            this.description = description;
+        }
+
+        public String getWordType() {
+            return wordType;
+        }
+
+        public String getDescription() {
+            return description;
+        }
     }
 
 }

@@ -1,10 +1,10 @@
 package me.shib.java.app.telegram.bot.dictionbot;
 
-import me.shib.java.lib.telegram.bot.run.LaunchBots;
+import me.shib.java.lib.telegram.bot.easybot.BotLauncher;
 
 public class LocalLauncher {
 
     public static void main(String[] args) {
-        LaunchBots.main(args);
+        BotLauncher.main(args);
     }
 }
