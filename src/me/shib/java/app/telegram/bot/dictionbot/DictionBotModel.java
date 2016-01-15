@@ -119,6 +119,11 @@ public class DictionBotModel extends BotModel {
         return false;
     }
 
+    @Override
+    public boolean onChosenInlineResult(ChosenInlineResult chosenInlineResult) {
+        return false;
+    }
+
     public Message sendStatusMessage(long chatId) {
         return null;
     }
