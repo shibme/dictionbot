@@ -20,8 +20,6 @@ public class DictionBotModel extends BotModel {
             "Sorry xxxxxxxxxx, I couldn't figure it out.",
             "If that's really an english word I should have found it by now. I guess I'm not that good enough."};
 
-    private static final String[] developerName = {"Shibly", "Meeran"};
-
     private DictionService dictionService;
     private TelegramBot bot;
 
@@ -75,36 +73,18 @@ public class DictionBotModel extends BotModel {
         return noResult[rand.nextInt(noResult.length)].replace("xxxxxxxxxx", "*" + name + "*");
     }
 
-    private String getKnownUserMessage(String firstName, String lastName, String text) {
-        for (String devName : developerName) {
-            if (text.equalsIgnoreCase(devName)) {
-                return "That guy gave me life. He doesn't want me to say anything more.";
-            }
-        }
-        if (text.equalsIgnoreCase(firstName) || text.equalsIgnoreCase(lastName)) {
-            return "Don't you know who you are?";
-        }
-        return null;
-    }
-
     public Message onReceivingMessage(Message msg) {
         try {
             String text = msg.getText();
             long sender = msg.getChat().getId();
-            User sendingUser = msg.getFrom();
             if ((text == null) || (text.split("\\s+").length > 1) || (!isValidText(text))) {
-                return bot.sendMessage(new ChatId(sender), "Hello *" + getProperName(msg.getFrom()) + "*, please send only a single english word that doesn't have any special characters.", ParseMode.Markdown, false, msg.getMessage_id());
+                return bot.sendMessage(new ChatId(sender), "Hello *" + getProperName(msg.getFrom()) + "*, please send a single english word that doesn't have any special characters.", ParseMode.Markdown, false, msg.getMessage_id());
             } else {
-                String knownUserMessage = getKnownUserMessage(sendingUser.getFirst_name(), sendingUser.getLast_name(), text);
-                if (knownUserMessage != null) {
-                    return bot.sendMessage(new ChatId(sender), knownUserMessage, ParseMode.None, false, msg.getMessage_id());
+                DictionWord wordMatch = dictionService.getDictionWord(text);
+                if (wordMatch != null) {
+                    return bot.sendMessage(new ChatId(sender), wordMatch.toString(), ParseMode.None, false, msg.getMessage_id());
                 } else {
-                    DictionWord wordMatch = dictionService.getDictionWord(text);
-                    if (wordMatch != null) {
-                        return bot.sendMessage(new ChatId(sender), wordMatch.toString(), ParseMode.None, false, msg.getMessage_id());
-                    } else {
-                        return bot.sendMessage(new ChatId(sender), getNoResultMessage(getProperName(msg.getFrom())), ParseMode.Markdown, false, msg.getMessage_id());
-                    }
+                    return bot.sendMessage(new ChatId(sender), getNoResultMessage(getProperName(msg.getFrom())), ParseMode.Markdown, false, msg.getMessage_id());
                 }
             }
         } catch (Exception e) {
