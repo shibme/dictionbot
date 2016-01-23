@@ -2,6 +2,7 @@ package me.shib.java.app.telegram.bot.dictionbot;
 
 import me.shib.java.lib.dictionary.service.DictionService;
 import me.shib.java.lib.dictionary.service.DictionWord;
+import me.shib.java.lib.telegram.bot.easybot.BotConfig;
 import me.shib.java.lib.telegram.bot.easybot.BotModel;
 import me.shib.java.lib.telegram.bot.service.TelegramBot;
 import me.shib.java.lib.telegram.bot.service.TelegramBot.ChatAction;
@@ -23,9 +24,10 @@ public class DictionBotModel extends BotModel {
     private DictionService dictionService;
     private TelegramBot bot;
 
-    public DictionBotModel() {
-        dictionService = new DictionService();
+    public DictionBotModel(BotConfig config) {
+        super(config);
         bot = getBot();
+        dictionService = new DictionService();
     }
 
     private boolean isValidText(String text) {
@@ -82,7 +84,7 @@ public class DictionBotModel extends BotModel {
             } else {
                 DictionWord wordMatch = dictionService.getDictionWord(text);
                 if (wordMatch != null) {
-                    return bot.sendMessage(new ChatId(sender), wordMatch.toString(), ParseMode.None, false, msg.getMessage_id());
+                    return bot.sendMessage(new ChatId(sender), wordMatch.toString(), null, false, msg.getMessage_id());
                 } else {
                     return bot.sendMessage(new ChatId(sender), getNoResultMessage(getProperName(msg.getFrom())), ParseMode.Markdown, false, msg.getMessage_id());
                 }

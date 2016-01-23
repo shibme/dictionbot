@@ -1,7 +1,7 @@
 [
   {
-	"botModelClassName": "me.shib.java.app.telegram.bot.dictionbot.DictionBotModel",
 	"botApiToken": "YourBotApiTokenGoesHere",
+	"botModelClassName": "me.shib.java.app.telegram.bot.dictionbot.DictionBotModel",
 	"commandList": ["/start","/help","/status","/scr"],
 	"threadCount": 4,
 	"adminIdList": [1111111111111, 1111111111111],
