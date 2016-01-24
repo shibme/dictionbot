@@ -10,11 +10,11 @@ Create a file named **easy-bot-config.json** and add the following:
 ```json
 [
 	{
-		"botModelclassName": "me.shib.java.app.telegram.bot.dictionbot.DictionBotModel",
 		"botApiToken": "YourBotApiTokenGoesHere",
+		"botModelclassName": "me.shib.java.app.telegram.bot.dictionbot.DictionBotModel",
 		"commandList": ["/start","/help","/status","/scr"],
 		"threadCount": 4,
-		"adminIdList": [1111111111111, 1111111111111],
+		"adminIdList": [0, 0],
 		"reportIntervalInSeconds": 86400
 	}
 ]
