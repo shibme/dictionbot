@@ -29,9 +29,5 @@ Create a file named **easy-bot-config.json** and add the following:
 ### Downloads [(Releases)](https://github.com/shibme/dictionbot/releases) ###
 * DictionBot Executable JAR **(DictionBot.jar)**
 
-### Dependencies ###
-* [easy-tbot](https://github.com/shibme/easy-tbot)
-* RiTa WordNet Dictionary Library
-
 ### References ###
 * [RiTa WordNet](https://rednoise.org/rita/reference/index.php)
