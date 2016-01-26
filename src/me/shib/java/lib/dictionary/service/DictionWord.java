@@ -30,10 +30,6 @@ public class DictionWord {
         return descriptions;
     }
 
-    public ArrayList<String> getHyponyms() {
-        return hyponyms;
-    }
-
     public String toString() {
         StringBuilder dictionBuilder = new StringBuilder();
         if (descriptions.size() > 0) {

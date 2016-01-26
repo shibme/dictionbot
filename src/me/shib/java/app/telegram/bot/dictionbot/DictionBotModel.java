@@ -2,11 +2,10 @@ package me.shib.java.app.telegram.bot.dictionbot;
 
 import me.shib.java.lib.dictionary.service.DictionService;
 import me.shib.java.lib.dictionary.service.DictionWord;
-import me.shib.java.lib.telegram.bot.easybot.BotConfig;
-import me.shib.java.lib.telegram.bot.easybot.BotModel;
-import me.shib.java.lib.telegram.bot.service.TelegramBot;
-import me.shib.java.lib.telegram.bot.service.TelegramBot.ChatAction;
-import me.shib.java.lib.telegram.bot.types.*;
+import me.shib.java.lib.jbots.BotConfig;
+import me.shib.java.lib.jbots.BotModel;
+import me.shib.java.lib.jtelebot.service.TelegramBot;
+import me.shib.java.lib.jtelebot.types.*;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,7 +53,7 @@ public class DictionBotModel extends BotModel {
         if (text != null) {
             if (text.equalsIgnoreCase("/start") || text.equalsIgnoreCase("/help")) {
                 try {
-                    bot.sendChatAction(new ChatId(msg.getChat().getId()), ChatAction.typing);
+                    bot.sendChatAction(new ChatId(msg.getChat().getId()), TelegramBot.ChatAction.typing);
                     return bot.sendMessage(new ChatId(msg.getChat().getId()), "Hi *" + getProperName(msg.getFrom()) + "*. My name is *Diction Bot* (DictionBot)."
                             + " Just type in any *English word* and I'll try to give you the best possible definition/description.\n"
                             + "Please give me the best possible rating here - [Click here to rate & review DictionBot](https://telegram.me/storebot?start=dictionbot)", ParseMode.Markdown);
