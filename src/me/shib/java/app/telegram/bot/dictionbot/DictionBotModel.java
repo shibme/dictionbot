@@ -84,7 +84,7 @@ public class DictionBotModel extends BotModel {
             } else {
                 DictionWord wordMatch = dictionService.getDictionWord(text);
                 if (wordMatch != null) {
-                    return bot.sendMessage(new ChatId(sender), wordMatch.toString(), null, false, msg.getMessage_id());
+                    return bot.sendMessage(new ChatId(sender), wordMatch.toString() + "\n\n[Rate and Review DictionBot](https://telegram.me/storebot?start=dictionbot)", ParseMode.Markdown, false, msg.getMessage_id());
                 } else {
                     return bot.sendMessage(new ChatId(sender), getNoResultMessage(getProperName(msg.getFrom())), ParseMode.Markdown, false, msg.getMessage_id());
                 }
@@ -106,7 +106,8 @@ public class DictionBotModel extends BotModel {
                 for (int i = 0; i < descriptions.size(); i++) {
                     String id = "desc-" + i;
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
-                    String text = "*" + wordToFind + "* _(" + descriptions.get(i).getWordType() + ")_ - " + descriptions.get(i).getDescription();
+                    String text = "*" + wordToFind + "* _(" + descriptions.get(i).getWordType() + ")_ - " + descriptions.get(i).getDescription()
+                            + "\n\n[Rate and Review DictionBot](https://telegram.me/storebot?start=dictionbot)";
                     InlineQueryResultArticle article = new InlineQueryResultArticle(id, title, text);
                     article.setParse_mode(ParseMode.Markdown);
                     results[i] = article;

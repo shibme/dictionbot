@@ -37,13 +37,13 @@ public class DictionWord {
     public String toString() {
         StringBuilder dictionBuilder = new StringBuilder();
         if (descriptions.size() > 0) {
-            dictionBuilder.append(word).append(":\n\nDescription:\n");
+            dictionBuilder.append("*").append(word).append(":\n\nDescription:\n*");
             for (DictionDesc description : descriptions) {
                 dictionBuilder.append(description.wordType).append(" - ").append(description.description).append("\n");
             }
         }
         if (hyponyms.size() > 0) {
-            dictionBuilder.append("\nRelated to \"").append(word).append("\":\n");
+            dictionBuilder.append("*\nRelated to \"").append(word).append("\":\n*");
             for (int i = 0; i < hyponyms.size(); i++) {
                 dictionBuilder.append(hyponyms.get(i));
                 if (i < (hyponyms.size() - 1)) {
