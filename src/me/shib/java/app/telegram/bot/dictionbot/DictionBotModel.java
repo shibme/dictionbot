@@ -22,11 +22,13 @@ public class DictionBotModel extends BotModel {
 
     private DictionService dictionService;
     private TelegramBot bot;
+    private String ratingUrl;
 
     public DictionBotModel(BotConfig config) {
         super(config);
         bot = getBot();
         dictionService = new DictionService();
+        ratingUrl = "[Rate and Review " + bot.getIdentity().getUsername() + "](https://telegram.me/storebot?start=" + bot.getIdentity().getUsername() + ")";
     }
 
     private boolean isValidText(String text) {
@@ -54,9 +56,10 @@ public class DictionBotModel extends BotModel {
             if (text.equalsIgnoreCase("/start") || text.equalsIgnoreCase("/help")) {
                 try {
                     bot.sendChatAction(new ChatId(msg.getChat().getId()), TelegramBot.ChatAction.typing);
-                    return bot.sendMessage(new ChatId(msg.getChat().getId()), "Hi *" + getProperName(msg.getFrom()) + "*. My name is *Diction Bot* (DictionBot)."
+                    return bot.sendMessage(new ChatId(msg.getChat().getId()), "Hi *" + getProperName(msg.getFrom()) + "*. My name is *"
+                            + getProperName(bot.getIdentity()) + "* (@" + bot.getIdentity().getUsername() + ")."
                             + " Just type in any *English word* and I'll try to give you the best possible definition/description.\n"
-                            + "Please give me the best possible rating here - [Click here to rate & review DictionBot](https://telegram.me/storebot?start=dictionbot)", ParseMode.Markdown);
+                            + "Please give me the best possible rating here - " + ratingUrl, ParseMode.Markdown);
                 } catch (IOException e) {
                     return null;
                 }
@@ -83,7 +86,7 @@ public class DictionBotModel extends BotModel {
             } else {
                 DictionWord wordMatch = dictionService.getDictionWord(text);
                 if (wordMatch != null) {
-                    return bot.sendMessage(new ChatId(sender), wordMatch.toString() + "\n\n[Rate and Review DictionBot](https://telegram.me/storebot?start=dictionbot)", ParseMode.Markdown, false, msg.getMessage_id());
+                    return bot.sendMessage(new ChatId(sender), wordMatch.toString() + "\n\n" + ratingUrl, ParseMode.Markdown, false, msg.getMessage_id());
                 } else {
                     return bot.sendMessage(new ChatId(sender), getNoResultMessage(getProperName(msg.getFrom())), ParseMode.Markdown, false, msg.getMessage_id());
                 }
@@ -106,7 +109,7 @@ public class DictionBotModel extends BotModel {
                     String id = "desc-" + i;
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
                     String text = "*" + wordToFind + "* _(" + descriptions.get(i).getWordType() + ")_ - " + descriptions.get(i).getDescription()
-                            + "\n\n[Rate and Review DictionBot](https://telegram.me/storebot?start=dictionbot)";
+                            + "\n\n" + ratingUrl;
                     InlineQueryResultArticle article = new InlineQueryResultArticle(id, title, text);
                     article.setParse_mode(ParseMode.Markdown);
                     results[i] = article;
