@@ -2,8 +2,8 @@ package me.shib.java.app.telegram.bot.dictionbot;
 
 import me.shib.java.lib.dictionary.service.DictionService;
 import me.shib.java.lib.dictionary.service.DictionWord;
-import me.shib.java.lib.jbots.BotConfig;
-import me.shib.java.lib.jbots.BotModel;
+import me.shib.java.lib.jbots.JBotConfig;
+import me.shib.java.lib.jbots.JBotModel;
 import me.shib.java.lib.jtelebot.service.TelegramBot;
 import me.shib.java.lib.jtelebot.types.*;
 
@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class DictionBotModel extends BotModel {
+public class DictionBotModel extends JBotModel {
 
     private static final String[] noResult = {"Sorry xxxxxxxxxx, looks like I have a lot to learn.",
             "Please accept my apology, xxxxxxxxxx. I don't know what that means.",
@@ -24,7 +24,7 @@ public class DictionBotModel extends BotModel {
     private TelegramBot bot;
     private String ratingUrl;
 
-    public DictionBotModel(BotConfig config) {
+    public DictionBotModel(JBotConfig config) {
         super(config);
         bot = getBot();
         dictionService = new DictionService();
