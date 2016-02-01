@@ -106,8 +106,7 @@
                             <releaseName>${project.artifactId} - ${project.version}</releaseName>
                             <description>Download the standalone executable -
                                 `runnable-${project.artifactId}.jar`
-                                and read the **project's README.md** for any configuration
-                                instructions.
+                                and read the project's 'README.md' for configuration instructions.
                             </description>
                             <tag>${project.version}</tag>
                             <fileSets>
