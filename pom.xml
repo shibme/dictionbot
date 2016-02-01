@@ -5,7 +5,7 @@
 
 	<groupId>me.shib.java.app</groupId>
 	<artifactId>dictionbot</artifactId>
-	<version>1.3.1</version>
+	<version>1.3.2</version>
 	<name>DictionBot</name>
 	<description>Telegram's @DictionBot - A simple English dictionary with almost every word in the English vocabulary</description>
 	<url>https://github.com/shibme/dictionbot</url>
@@ -14,14 +14,6 @@
 		<url>https://github.com/shibme/dictionbot/issues</url>
 		<system>GitHub Issues</system>
 	</issueManagement>
-
-	<licenses>
-		<license>
-			<name>GNU General Public License, version 2</name>
-			<url>https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
 
 	<scm>
 		<url>https://github.com/shibme/dictionbot</url>
@@ -38,6 +30,14 @@
 		</developer>
 	</developers>
 
+	<licenses>
+		<license>
+			<name>GNU General Public License</name>
+			<url>http://www.gnu.org/licenses/gpl.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
@@ -48,7 +48,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.3</version>
+				<version>3.5</version>
 				<configuration>
 					<source>1.7</source>
 					<target>1.7</target>
@@ -59,7 +59,7 @@
 				<artifactId>maven-assembly-plugin</artifactId>
 				<version>2.6</version>
 				<configuration>
-					<finalName>${project.name}</finalName>
+					<finalName>runnable-${project.artifactId}</finalName>
 					<appendAssemblyId>false</appendAssemblyId>
 					<descriptorRefs>
 						<descriptorRef>jar-with-dependencies</descriptorRef>
@@ -81,14 +81,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-deploy-plugin</artifactId>
-				<version>2.8.2</version>
-				<configuration>
-					<skip>true</skip>
-				</configuration>
-			</plugin>
-			<plugin>
 				<groupId>de.jutzig</groupId>
 				<artifactId>github-release-plugin</artifactId>
 				<version>1.1.1</version>
@@ -102,9 +94,9 @@
 						<inherited>false</inherited>
 						<configuration>
 							<overwriteArtifact>true</overwriteArtifact>
-							<releaseName>v${project.version} - ${project.name}</releaseName>
+							<releaseName>${project.artifactId} - ${project.version}</releaseName>
 							<description>Download the standalone executable -
-								**${project.artifactId}-${project.version}-jar-with-dependencies.jar**
+								`runnable-${project.artifactId}.jar`
 								and read the **project's README.md** for any configuration
 								instructions.</description>
 							<tag>${project.version}</tag>
@@ -112,7 +104,7 @@
 								<fileSet>
 									<directory>${project.build.directory}</directory>
 									<includes>
-										<include>${project.name}.jar</include>
+										<include>runnable-${project.artifactId}.jar</include>
 									</includes>
 								</fileSet>
 							</fileSets>
