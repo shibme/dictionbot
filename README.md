@@ -4,7 +4,7 @@
 
 Telegram's [@DictionBot](https://telegram.me/DictionBot) - A simple English dictionary with almost every word in the English vocabulary
 
-### Configuration for Bot Owners ###
+### Configuration for Bot Owners
 Create a file named `jbots-config.json` and add the following
 ```json
 [
@@ -25,8 +25,8 @@ Create a file named `jbots-config.json` and add the following
 * `adminIdList` - Use [@GO_Robot](https://telegram.me/GO_Robot) to find your telegram ID and add it to admin list.
 * `reportIntervalInSeconds` - The intervals at which the Bot reports the Admins the status (To know if it is alive). 
 
-### Downloads [(Releases)](https://github.com/shibme/dictionbot/releases) ###
+### Downloads [(Releases)](https://github.com/shibme/dictionbot/releases)
 * DictionBot Executable JAR `DictionBot.jar`
 
-### References ###
+### References
 * [RiTa WordNet](https://rednoise.org/rita/reference/index.php)
