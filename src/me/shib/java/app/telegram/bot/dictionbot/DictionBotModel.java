@@ -10,6 +10,7 @@ import me.shib.java.lib.jtelebot.types.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Logger;
 
 public class DictionBotModel extends JBotModel {
 
@@ -19,6 +20,8 @@ public class DictionBotModel extends JBotModel {
             "I am still updating my knowledge xxxxxxxxxx. Will learn soon. But I'm very sorry for now.",
             "Sorry xxxxxxxxxx, I couldn't figure it out.",
             "If that's really an english word I should have found it by now. I guess I'm not that good enough."};
+
+    private static Logger logger = Logger.getLogger(DictionBotModel.class.getName());
 
     private DictionService dictionService;
     private TelegramBot bot;
@@ -61,7 +64,7 @@ public class DictionBotModel extends JBotModel {
                             + " Just type in any *English word* and I'll try to give you the best possible definition/description.\n"
                             + "Please give me the best possible rating here - " + ratingUrl, ParseMode.Markdown);
                 } catch (IOException e) {
-                    return null;
+                    logger.throwing(this.getClass().getName(), "onCommand", e);
                 }
             }
         }
@@ -92,7 +95,7 @@ public class DictionBotModel extends JBotModel {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.throwing(this.getClass().getName(), "onReceivingMessage", e);
         }
         return null;
     }
@@ -117,7 +120,7 @@ public class DictionBotModel extends JBotModel {
                 try {
                     return bot.answerInlineQuery(query.getId(), results);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    logger.throwing(this.getClass().getName(), "onInlineQuery", e);
                 }
             }
         }
