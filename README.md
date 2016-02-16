@@ -10,7 +10,7 @@ Create a file named `jbots-config.json` and add the following
 [
 	{
 		"botApiToken": "YourBotApiTokenGoesHere",
-		"botModelClassName": "me.shib.java.app.telegram.bot.dictionbot.DictionBotModel",
+		"botModelClassName": "me.shib.java.app.telegram.bot.dictionbot.DictionBot",
 		"commandList": ["/start","/help","/status","/scr"],
 		"threadCount": 4,
 		"adminIdList": [0, 0],
