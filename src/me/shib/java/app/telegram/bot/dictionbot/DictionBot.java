@@ -2,8 +2,8 @@ package me.shib.java.app.telegram.bot.dictionbot;
 
 import me.shib.java.lib.dictionary.service.DictionService;
 import me.shib.java.lib.dictionary.service.DictionWord;
+import me.shib.java.lib.jbots.JBot;
 import me.shib.java.lib.jbots.JBotConfig;
-import me.shib.java.lib.jbots.JBotModel;
 import me.shib.java.lib.jtelebot.service.TelegramBot;
 import me.shib.java.lib.jtelebot.types.*;
 
@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class DictionBotModel extends JBotModel {
+public class DictionBot extends JBot {
 
     private static final String[] noResult = {"Sorry xxxxxxxxxx, looks like I have a lot to learn.",
             "Please accept my apology, xxxxxxxxxx. I don't know what that means.",
@@ -21,13 +21,13 @@ public class DictionBotModel extends JBotModel {
             "Sorry xxxxxxxxxx, I couldn't figure it out.",
             "If that's really an english word I should have found it by now. I guess I'm not that good enough."};
 
-    private static Logger logger = Logger.getLogger(DictionBotModel.class.getName());
+    private static Logger logger = Logger.getLogger(DictionBot.class.getName());
 
     private DictionService dictionService;
     private TelegramBot bot;
     private String ratingUrl;
 
-    public DictionBotModel(JBotConfig config) {
+    public DictionBot(JBotConfig config) {
         super(config);
         bot = getBot();
         dictionService = new DictionService();
@@ -58,7 +58,7 @@ public class DictionBotModel extends JBotModel {
         if (text != null) {
             if (text.equalsIgnoreCase("/start") || text.equalsIgnoreCase("/help")) {
                 try {
-                    bot.sendChatAction(new ChatId(msg.getChat().getId()), TelegramBot.ChatAction.typing);
+                    bot.sendChatAction(new ChatId(msg.getChat().getId()), ChatAction.typing);
                     return bot.sendMessage(new ChatId(msg.getChat().getId()), "Hi *" + getProperName(msg.getFrom()) + "*. My name is *"
                             + getProperName(bot.getIdentity()) + "* (@" + bot.getIdentity().getUsername() + ")."
                             + " Just type in any *English word* and I'll try to give you the best possible definition/description.\n"
