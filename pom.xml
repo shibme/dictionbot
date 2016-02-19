@@ -124,14 +124,6 @@
         </plugins>
     </build>
 
-    <repositories>
-        <repository>
-            <id>rita</id>
-            <name>RiTa Wordnet</name>
-            <url>http://resources.smile.deri.ie/maven-repository</url>
-        </repository>
-    </repositories>
-
     <dependencies>
         <dependency>
             <groupId>me.shib.java.lib</groupId>
@@ -144,14 +136,9 @@
             <version>0.1</version>
         </dependency>
         <dependency>
-            <groupId>wordnet</groupId>
-            <artifactId>wordnet-rita</artifactId>
-            <version>0.0.1</version>
-        </dependency>
-        <dependency>
-            <groupId>wordnet</groupId>
-            <artifactId>wordnet-support</artifactId>
-            <version>0.0.1</version>
+            <groupId>me.shib.java.lib</groupId>
+            <artifactId>diction</artifactId>
+            <version>0.1</version>
         </dependency>
     </dependencies>
 

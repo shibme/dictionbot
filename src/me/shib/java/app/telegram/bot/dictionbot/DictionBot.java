@@ -1,7 +1,7 @@
 package me.shib.java.app.telegram.bot.dictionbot;
 
-import me.shib.java.lib.dictionary.service.DictionService;
-import me.shib.java.lib.dictionary.service.DictionWord;
+import me.shib.java.lib.diction.DictionService;
+import me.shib.java.lib.diction.DictionWord;
 import me.shib.java.lib.jbots.JBot;
 import me.shib.java.lib.jbots.JBotConfig;
 import me.shib.java.lib.jtelebot.service.TelegramBot;

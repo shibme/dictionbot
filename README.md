@@ -31,6 +31,3 @@ Create a file named `jbots-config.json` and add the following
 
 ### Downloads [(Releases)](https://github.com/shibme/dictionbot/releases)
 * DictionBot Executable JAR `DictionBot.jar`
-
-### References
-* [RiTa WordNet](https://rednoise.org/rita/reference/index.php)
