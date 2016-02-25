@@ -1,6 +1,7 @@
 # DictionBot
 [![Build Status](https://travis-ci.org/shibme/dictionbot.svg)](https://travis-ci.org/shibme/dictionbot)
 [![Dependency Status](https://www.versioneye.com/user/projects/56adffd17e03c7003db6962a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56adffd17e03c7003db6962a)
+[![Percentage of issues still open](http://isitmaintained.com/badge/open/shibme/dictionbot.svg)](http://isitmaintained.com/project/shibme/dictionbot "Percentage of issues still open")
 
 Telegram's [@DictionBot](https://telegram.me/DictionBot) - A simple English dictionary with almost every word in the English vocabulary
 
