@@ -30,4 +30,4 @@ Create a file named `jbots-config.json` and add the following
 * `reportIntervalInSeconds` - The intervals at which the Bot reports the Admins the status (To know if it is alive). 
 
 ### Downloads [(Releases)](https://github.com/shibme/dictionbot/releases)
-* DictionBot Executable JAR `DictionBot.jar`
+* DictionBot Executable JAR `runnable-dictionbot.jar`

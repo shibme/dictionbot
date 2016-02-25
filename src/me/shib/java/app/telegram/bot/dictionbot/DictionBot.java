@@ -62,7 +62,7 @@ public class DictionBot extends JBot {
                     return bot.sendMessage(new ChatId(msg.getChat().getId()), "Hi *" + getProperName(msg.getFrom()) + "*. My name is *"
                             + getProperName(bot.getIdentity()) + "* (@" + bot.getIdentity().getUsername() + ")."
                             + " Just type in any *English word* and I'll try to give you the best possible definition/description.\n"
-                            + "Please give me the best possible rating here - " + ratingUrl, ParseMode.Markdown);
+                            + "Please give me the best possible rating here - " + ratingUrl, false, ParseMode.Markdown);
                 } catch (IOException e) {
                     logger.throwing(this.getClass().getName(), "onCommand", e);
                 }
@@ -85,13 +85,13 @@ public class DictionBot extends JBot {
             String text = msg.getText();
             long sender = msg.getChat().getId();
             if ((text == null) || (text.split("\\s+").length > 1) || (!isValidText(text))) {
-                return bot.sendMessage(new ChatId(sender), "Hello *" + getProperName(msg.getFrom()) + "*, please send a single english word that doesn't have any special characters.", ParseMode.Markdown, false, msg.getMessage_id());
+                return bot.sendMessage(new ChatId(sender), "Hello *" + getProperName(msg.getFrom()) + "*, please send a single english word that doesn't have any special characters.", false, ParseMode.Markdown, false, msg.getMessage_id());
             } else {
                 DictionWord wordMatch = dictionService.getDictionWord(text);
                 if (wordMatch != null) {
-                    return bot.sendMessage(new ChatId(sender), wordMatch.toString() + "\n\n" + ratingUrl, ParseMode.Markdown, false, msg.getMessage_id());
+                    return bot.sendMessage(new ChatId(sender), wordMatch.toString() + "\n\n" + ratingUrl, false, ParseMode.Markdown, false, msg.getMessage_id());
                 } else {
-                    return bot.sendMessage(new ChatId(sender), getNoResultMessage(getProperName(msg.getFrom())), ParseMode.Markdown, false, msg.getMessage_id());
+                    return bot.sendMessage(new ChatId(sender), getNoResultMessage(getProperName(msg.getFrom())), false, ParseMode.Markdown, false, msg.getMessage_id());
                 }
             }
         } catch (Exception e) {
