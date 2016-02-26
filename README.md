@@ -3,7 +3,7 @@
 [![Dependency Status](https://www.versioneye.com/user/projects/56adffd17e03c7003db6962a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56adffd17e03c7003db6962a)
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/shibme/dictionbot.svg)](http://isitmaintained.com/project/shibme/dictionbot "Percentage of issues still open")
 
-Telegram's [@DictionBot](https://telegram.me/DictionBot) - A simple English dictionary with almost every word in the English vocabulary
+Telegram's [@DictionBot](https://telegram.me/DictionBot) - A simple English dictionary that describes almost any word
 
 ### Configuration for Bot Owners
 Create a file named `jbots-config.json` and add the following
@@ -28,7 +28,4 @@ Create a file named `jbots-config.json` and add the following
 * `commandList` - The list of supported commands.
 * `threadCount` - The number of threads the bot should have. This bot is restricted to 7 threads.
 * `adminIdList` - Use [@GO_Robot](https://telegram.me/GO_Robot) to find your telegram ID and add it to admin list.
-* `reportIntervalInSeconds` - The intervals at which the Bot reports the Admins the status (To know if it is alive). 
-
-### Downloads [(Releases)](https://github.com/shibme/dictionbot/releases)
-* DictionBot Executable JAR `runnable-dictionbot.jar`
+* `reportIntervalInSeconds` - The intervals at which the Bot reports the Admins the status (To know if it is alive).
