@@ -4,7 +4,6 @@ import me.shib.java.lib.diction.DictionService;
 import me.shib.java.lib.diction.DictionWord;
 import me.shib.java.lib.jbots.JBot;
 import me.shib.java.lib.jbots.JBotConfig;
-import me.shib.java.lib.jtelebot.service.TelegramBot;
 import me.shib.java.lib.jtelebot.types.*;
 
 import java.io.IOException;
@@ -24,33 +23,12 @@ public class DictionBot extends JBot {
     private static Logger logger = Logger.getLogger(DictionBot.class.getName());
 
     private DictionService dictionService;
-    private TelegramBot bot;
     private String ratingUrl;
 
     public DictionBot(JBotConfig config) {
         super(config);
-        bot = getBot();
         dictionService = new DictionService();
         ratingUrl = "[Rate and Review " + bot.getIdentity().getUsername() + "](https://telegram.me/storebot?start=" + bot.getIdentity().getUsername() + ")";
-    }
-
-    private boolean isValidText(String text) {
-        return text != null && text.matches("^[A-Za-z0-9]+$");
-    }
-
-    private String getProperName(User user) {
-        if (user != null) {
-            if (isValidText(user.getFirst_name())) {
-                return user.getFirst_name();
-            }
-            if (isValidText(user.getLast_name())) {
-                return user.getLast_name();
-            }
-            if (isValidText(user.getUsername())) {
-                return user.getUsername();
-            }
-        }
-        return "";
     }
 
     public Message onCommand(Message msg) {
@@ -78,6 +56,10 @@ public class DictionBot extends JBot {
     private String getNoResultMessage(String name) {
         Random rand = new Random();
         return noResult[rand.nextInt(noResult.length)].replace("xxxxxxxxxx", "*" + name + "*");
+    }
+
+    private boolean isValidText(String text) {
+        return text != null && text.matches("^[A-Za-z0-9]+$");
     }
 
     public Message onReceivingMessage(Message msg) {
