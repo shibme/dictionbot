@@ -71,7 +71,7 @@ public class DictionBot extends JBot {
             } else {
                 DictionWord wordMatch = dictionService.getDictionWord(text);
                 if (wordMatch != null) {
-                    return bot.sendMessage(new ChatId(sender), wordMatch.toString() + "\n\n" + ratingUrl, false, ParseMode.Markdown, false, msg.getMessage_id());
+                    return bot.sendMessage(new ChatId(sender), wordMatch.toString() + "\n\n" + ratingUrl, false, ParseMode.Markdown, true, msg.getMessage_id());
                 } else {
                     return bot.sendMessage(new ChatId(sender), getNoResultMessage(getProperName(msg.getFrom())), false, ParseMode.Markdown, false, msg.getMessage_id());
                 }
@@ -97,6 +97,7 @@ public class DictionBot extends JBot {
                             + "\n\n" + ratingUrl;
                     InlineQueryResultArticle article = new InlineQueryResultArticle(id, title, text);
                     article.setParse_mode(ParseMode.Markdown);
+                    article.disableWebPagePreview(true);
                     results[i] = article;
                 }
                 try {
