@@ -19,16 +19,15 @@ public class DictionBot extends JBot {
             "I am still updating my knowledge xxxxxxxxxx. Will learn soon. But I'm very sorry for now.",
             "Sorry xxxxxxxxxx, I couldn't figure it out.",
             "If that's really an english word I should have found it by now. I guess I'm not that good enough."};
+    private static final String helpUsMarkdown = "Please *help us with a good* /rating *or* /review for our work.";
 
     private static Logger logger = Logger.getLogger(DictionBot.class.getName());
 
     private DictionService dictionService;
-    private String ratingUrl;
 
     public DictionBot(JBotConfig config) {
         super(config);
         dictionService = new DictionService();
-        ratingUrl = "[Rate and Review " + bot.getIdentity().getUsername() + "](https://telegram.me/storebot?start=" + bot.getIdentity().getUsername() + ")";
     }
 
     public Message onCommand(Message msg) {
@@ -40,7 +39,7 @@ public class DictionBot extends JBot {
                     return bot.sendMessage(new ChatId(msg.getChat().getId()), "Hi *" + getProperName(msg.getFrom()) + "*. My name is *"
                             + getProperName(bot.getIdentity()) + "* (@" + bot.getIdentity().getUsername() + ")."
                             + " Just type in any *English word* and I'll try to give you the best possible definition/description.\n"
-                            + "Please give me the best possible rating here - " + ratingUrl, false, ParseMode.Markdown);
+                            + helpUsMarkdown, false, ParseMode.Markdown);
                 } catch (IOException e) {
                     logger.throwing(this.getClass().getName(), "onCommand", e);
                 }
@@ -71,7 +70,7 @@ public class DictionBot extends JBot {
             } else {
                 DictionWord wordMatch = dictionService.getDictionWord(text);
                 if (wordMatch != null) {
-                    return bot.sendMessage(new ChatId(sender), wordMatch.toString() + "\n\n" + ratingUrl, false, ParseMode.Markdown, true, msg.getMessage_id());
+                    return bot.sendMessage(new ChatId(sender), wordMatch.toString() + "\n\n" + helpUsMarkdown, false, ParseMode.Markdown, true, msg.getMessage_id());
                 } else {
                     return bot.sendMessage(new ChatId(sender), getNoResultMessage(getProperName(msg.getFrom())), false, ParseMode.Markdown, false, msg.getMessage_id());
                 }
@@ -94,7 +93,7 @@ public class DictionBot extends JBot {
                     String id = "desc-" + i;
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
                     String text = "*" + wordToFind + "* _(" + descriptions.get(i).getWordType() + ")_ - " + descriptions.get(i).getDescription()
-                            + "\n\n" + ratingUrl;
+                            + "\n\n" + helpUsMarkdown;
                     InlineQueryResultArticle article = new InlineQueryResultArticle(id, title, text);
                     article.setParse_mode(ParseMode.Markdown);
                     article.disableWebPagePreview(true);
