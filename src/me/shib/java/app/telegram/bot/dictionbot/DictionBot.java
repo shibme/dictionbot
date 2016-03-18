@@ -26,10 +26,12 @@ public class DictionBot extends JBot {
     private static Logger logger = Logger.getLogger(DictionBot.class.getName());
 
     private DictionService dictionService;
+    private String helpUsHTMLWithLink;
 
     public DictionBot(JBotConfig config) {
         super(config);
-        dictionService = new DictionService();
+        this.dictionService = new DictionService();
+        this.helpUsHTMLWithLink = "Please <b>help us with a good</b> <a href=\"https://telegram.me/" + bot.getIdentity().getUsername() + "?start=review\">rating or review</a> for our work.";
     }
 
     private String toHTMLFormatting(DictionWord word) {
@@ -122,7 +124,7 @@ public class DictionBot extends JBot {
                     String id = "desc-" + i;
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
                     String text = "<b>" + wordToFind + "</b> <i>(" + descriptions.get(i).getWordType() + ")</i> - " + descriptions.get(i).getDescription()
-                            + "\n\n" + helpUsHTML;
+                            + "\n\n" + helpUsHTMLWithLink;
                     InlineQueryResultArticle article = new InlineQueryResultArticle(id, title, text);
                     article.setParse_mode(ParseMode.HTML);
                     article.disableWebPagePreview(true);
