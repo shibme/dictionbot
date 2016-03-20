@@ -34,14 +34,25 @@ public class DictionBot extends JBot {
         this.helpUsHTMLWithLink = "Please <b>help us with a good</b> <a href=\"https://telegram.me/" + bot.getIdentity().getUsername() + "?start=review\">rating or review</a> for our work.";
     }
 
-    private String toHTMLFormatting(DictionWord word) {
+    private String toHTMLFormatting(DictionWord dictionWord) {
         StringBuilder dictionBuilder = new StringBuilder();
-        List<DictionWord.DictionDesc> descriptions = word.getDescriptions();
+        List<DictionWord.DictionDesc> descriptions = dictionWord.getDescriptions();
         if (descriptions.size() > 0) {
-            dictionBuilder.append("<b>").append(word.getWord()).append(":\n\nDescription:\n</b>");
+            dictionBuilder.append("<b>").append(dictionWord.getWord().toLowerCase()).append(":\n</b>");
             for (DictionWord.DictionDesc description : descriptions) {
                 dictionBuilder.append("<i>").append(description.getWordType()).append("</i>").append(" - ").append(description.getDescription()).append("\n");
             }
+        }
+        List<String> hyponyms = dictionWord.getHyponyms();
+        if (hyponyms.size() > 0) {
+            dictionBuilder.append("\n<b>Related words:").append("\n</b>");
+            for (int i = 0; i < hyponyms.size(); i++) {
+                dictionBuilder.append("<i>").append(hyponyms.get(i)).append("</i>");
+                if (i < (hyponyms.size() - 1)) {
+                    dictionBuilder.append(" - ");
+                }
+            }
+            dictionBuilder.append("\n");
         }
         if (dictionBuilder.toString().isEmpty()) {
             return null;
