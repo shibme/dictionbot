@@ -5,7 +5,16 @@ import me.shib.java.lib.diction.DictionWord;
 import me.shib.java.lib.jbots.JBot;
 import me.shib.java.lib.jbots.JBotConfig;
 import me.shib.java.lib.jbots.MessageHandler;
-import me.shib.java.lib.jtelebot.types.*;
+import me.shib.java.lib.jtelebot.models.inline.InlineQueryResult;
+import me.shib.java.lib.jtelebot.models.inline.InlineQueryResultArticle;
+import me.shib.java.lib.jtelebot.models.inline.InputTextMessageContent;
+import me.shib.java.lib.jtelebot.models.types.ChatAction;
+import me.shib.java.lib.jtelebot.models.types.ChatId;
+import me.shib.java.lib.jtelebot.models.types.ParseMode;
+import me.shib.java.lib.jtelebot.models.updates.CallbackQuery;
+import me.shib.java.lib.jtelebot.models.updates.ChosenInlineResult;
+import me.shib.java.lib.jtelebot.models.updates.InlineQuery;
+import me.shib.java.lib.jtelebot.models.updates.Message;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +22,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class DictionBot extends JBot {
+public final class DictionBot extends JBot {
 
     private static final String[] noResult = {"Sorry xxxxxxxxxx, looks like I have a lot to learn.",
             "Please accept my apology, xxxxxxxxxx. I don't know what that means.",
@@ -31,7 +40,7 @@ public class DictionBot extends JBot {
     public DictionBot(JBotConfig config) {
         super(config);
         this.dictionService = new DictionService();
-        this.helpUsHTMLWithLink = "Please <b>help us with a good</b> <a href=\"https://telegram.me/" + bot.getIdentity().getUsername() + "?start=review\">rating or review</a> for our work.";
+        this.helpUsHTMLWithLink = "Please <b>help us with a good</b> <a href=\"https://telegram.me/" + bot().getIdentity().getUsername() + "?start=review\">rating or review</a> for our work.";
     }
 
     private String toHTMLFormatting(DictionWord dictionWord) {
@@ -64,19 +73,19 @@ public class DictionBot extends JBot {
     public MessageHandler onMessage(Message message) {
         return new MessageHandler(message) {
             @Override
-            public boolean onCommandFromAdmin(String command) {
-                return onCommandFromUser(command);
+            public boolean onCommandFromAdmin(String command, String argument) {
+                return onCommandFromUser(command, argument);
             }
 
             @Override
-            public boolean onCommandFromUser(String command) {
-                if (message.getText().equalsIgnoreCase("/start") || message.getText().equalsIgnoreCase("/help")) {
+            public boolean onCommandFromUser(String command, String argument) {
+                if (command.equalsIgnoreCase("/start") || command.equalsIgnoreCase("/help")) {
                     try {
-                        bot.sendChatAction(new ChatId(message.getChat().getId()), ChatAction.typing);
-                        bot.sendMessage(new ChatId(message.getChat().getId()), "Hi <b>" + getProperName(message.getFrom()) + "</b>. My name is <b>"
-                                + getProperName(bot.getIdentity()) + "</b> (@" + bot.getIdentity().getUsername() + ")."
+                        bot().sendChatAction(new ChatId(message.getChat().getId()), ChatAction.typing);
+                        bot().sendMessage(new ChatId(message.getChat().getId()), "Hi <b>" + getProperName(message.getFrom()) + "</b>. My name is <b>"
+                                + getProperName(bot().getIdentity()) + "</b> (@" + bot().getIdentity().getUsername() + ")."
                                 + " Just type in any <b>English word</b> and I'll try to give you the best possible definition/description.\n"
-                                + helpUsHTML, false, ParseMode.HTML);
+                                + helpUsHTML, ParseMode.HTML);
                         return true;
                     } catch (IOException e) {
                         logger.throwing(this.getClass().getName(), "onCommand", e);
@@ -96,20 +105,20 @@ public class DictionBot extends JBot {
                     String text = message.getText();
                     long sender = message.getChat().getId();
                     if ((text == null) || (text.split("\\s+").length > 1) || (!isValidText(text))) {
-                        bot.sendMessage(new ChatId(sender), "Hello *" + getProperName(message.getFrom()) + "*, please send a single english word that doesn't have any special characters.", false, ParseMode.Markdown, false, message.getMessage_id());
+                        bot().sendMessage(new ChatId(sender), "Hello *" + getProperName(message.getFrom()) + "*, please send a single english word that doesn't have any special characters.", ParseMode.Markdown, false, message.getMessage_id());
                     } else {
                         DictionWord wordMatch = dictionService.getDictionWord(text);
                         if (wordMatch != null) {
-                            bot.sendMessage(new ChatId(sender), toHTMLFormatting(wordMatch) + "\n" + helpUsHTML, false, ParseMode.HTML, true, message.getMessage_id());
+                            bot().sendMessage(new ChatId(sender), toHTMLFormatting(wordMatch) + "\n" + helpUsHTML, ParseMode.HTML, true, message.getMessage_id());
                         } else {
-                            bot.sendMessage(new ChatId(sender), getNoResultMessage(getProperName(message.getFrom())), false, ParseMode.Markdown, false, message.getMessage_id());
+                            bot().sendMessage(new ChatId(sender), getNoResultMessage(getProperName(message.getFrom())), ParseMode.Markdown, false, message.getMessage_id());
                         }
                     }
                     return true;
                 } catch (Exception e) {
                     logger.throwing(this.getClass().getName(), "onReceivingMessage", e);
+                    return false;
                 }
-                return false;
             }
         };
     }
@@ -124,7 +133,7 @@ public class DictionBot extends JBot {
     }
 
     @Override
-    public boolean onInlineQuery(InlineQuery query) {
+    public void onInlineQuery(InlineQuery query) {
         String wordToFind = query.getQuery();
         if ((wordToFind != null) && (wordToFind.split("\\s+").length == 1) && (isValidText(wordToFind))) {
             DictionWord wordMatch = dictionService.getDictionWord(wordToFind);
@@ -136,24 +145,27 @@ public class DictionBot extends JBot {
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
                     String text = "<b>" + wordToFind + "</b> <i>(" + descriptions.get(i).getWordType() + ")</i> - " + descriptions.get(i).getDescription()
                             + "\n\n" + helpUsHTMLWithLink;
-                    InlineQueryResultArticle article = new InlineQueryResultArticle(id, title, text);
-                    article.setParse_mode(ParseMode.HTML);
-                    article.disableWebPagePreview(true);
+                    InputTextMessageContent inputTextMessageContent = new InputTextMessageContent(text);
+                    inputTextMessageContent.setParse_mode(ParseMode.HTML);
+                    inputTextMessageContent.disableWebPagePreview();
+                    InlineQueryResultArticle article = new InlineQueryResultArticle(id, title, inputTextMessageContent);
                     results[i] = article;
                 }
                 try {
-                    return bot.answerInlineQuery(query.getId(), results);
+                    bot().answerInlineQuery(query.getId(), results);
                 } catch (IOException e) {
                     logger.throwing(this.getClass().getName(), "onInlineQuery", e);
                 }
             }
         }
-        return false;
     }
 
     @Override
-    public boolean onChosenInlineResult(ChosenInlineResult chosenInlineResult) {
-        return false;
+    public void onChosenInlineResult(ChosenInlineResult chosenInlineResult) {
+    }
+
+    @Override
+    public void onCallbackQuery(CallbackQuery callbackQuery) {
     }
 
 }

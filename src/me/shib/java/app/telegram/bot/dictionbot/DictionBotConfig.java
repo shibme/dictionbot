@@ -1,13 +1,8 @@
-# DictionBot
-[![Build Status](https://travis-ci.org/shibme/dictionbot.svg)](https://travis-ci.org/shibme/dictionbot)
-[![Dependency Status](https://www.versioneye.com/user/projects/56adffd17e03c7003db6962a/badge.svg?style=flat)](https://www.versioneye.com/user/projects/56adffd17e03c7003db6962a)
-[![Percentage of issues still open](http://isitmaintained.com/badge/open/shibme/dictionbot.svg)](http://isitmaintained.com/project/shibme/dictionbot "Percentage of issues still open")
+package me.shib.java.app.telegram.bot.dictionbot;
 
-Telegram's [@DictionBot](https://telegram.me/DictionBot) - A simple English dictionary that describes almost any word
+import me.shib.java.lib.jbots.JBot;
+import me.shib.java.lib.jbots.JBotConfig;
 
-### Configuration for Bot Owners
-Edit `DictionBotConfig.java` and update your bot token or configure based on your requirements
-```java
 public final class DictionBotConfig extends JBotConfig {
 
     private static final String botApiToken = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx";
@@ -59,4 +54,3 @@ public final class DictionBotConfig extends JBotConfig {
         return botModelClass;
     }
 }
-```
