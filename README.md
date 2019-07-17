@@ -10,5 +10,5 @@ Install the latest stable version of docker client
 ### How to start?
 Set `TELEGRAM_BOT_TOKEN` environment variable and run the following in your terminal.
 ```bash
-curl -s https://shibme.github.io/dictionbot/dictionbot-runner | bash
+curl -s https://shib.me/dictionbot/launcher | bash
 ```
