@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+DOCKER_USERNAME=`echo $DOCKER_USERNAME_BASE64 | base64 -d`
+DOCKER_PASSWORD=`echo $DOCKER_PASSWORD_BASE64 | base64 -d`
+echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+docker build -t shibme/dictionbot .
+docker push shibme/dictionbot
+docker logout

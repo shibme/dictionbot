@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+DOCKER_VERSION_RESPONSE=$(docker -v)
+EXPECTED_RESPONSE="Docker version "
+if test "${DOCKER_VERSION_RESPONSE#*$EXPECTED_RESPONSE}" != "$DOCKER_VERSION_RESPONSE"
+then
+    echo "Attempting to kill any running docker instances of DictionBot..."
+    docker kill dictionbot-container
+    echo "Attempting to remove any docker instances of DictionBot..."
+    docker rm dictionbot-container
+    docker pull shibme/dictionbot
+    echo "Running container: dictionbot-container"
+    docker run -e TELEGRAM_BOT_TOKEN --name dictionbot-container shibme/dictionbot
+else
+    echo "Please install docker client before you begin."
+fi
