@@ -25,7 +25,11 @@ public final class DictionBot extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
         } else if (update.getInlineQuery() != null) {
-            updateHandler.onInlineQuery(update.getInlineQuery());
+            try {
+                updateHandler.onInlineQuery(update.getInlineQuery());
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
         }
     }
 

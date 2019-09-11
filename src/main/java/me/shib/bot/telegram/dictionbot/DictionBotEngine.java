@@ -3,19 +3,23 @@ package me.shib.bot.telegram.dictionbot;
 import me.shib.java.lib.diction.DictionService;
 import me.shib.java.lib.diction.DictionWord;
 import org.telegram.telegrambots.meta.api.methods.ActionType;
+import org.telegram.telegrambots.meta.api.methods.AnswerInlineQuery;
 import org.telegram.telegrambots.meta.api.methods.ParseMode;
 import org.telegram.telegrambots.meta.api.methods.send.SendChatAction;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Chat;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.User;
 import org.telegram.telegrambots.meta.api.objects.inlinequery.InlineQuery;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.inputmessagecontent.InputTextMessageContent;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResult;
+import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public final class DictionBotEngine {
+final class DictionBotEngine {
 
     private static final String invalidMessageResponse = "Please send a valid word to search the dictionary";
     private static final String[] noResult = {"Sorry xxxxxxxxxx, looks like I have a lot to learn.",
@@ -28,7 +32,7 @@ public final class DictionBotEngine {
     private transient DictionBot bot;
     private transient DictionService dictionService;
 
-    public DictionBotEngine(DictionBot bot) {
+    DictionBotEngine(DictionBot bot) {
         this.bot = bot;
         this.dictionService = new DictionService();
     }
@@ -54,14 +58,7 @@ public final class DictionBotEngine {
         return nameBuilder.toString();
     }
 
-    public static String getProperName(Chat chat) {
-        if (chat != null) {
-            return getProperName(chat.getFirstName(), chat.getLastName(), chat.getUserName());
-        }
-        return "";
-    }
-
-    public static String getProperName(User user) {
+    private static String getProperName(User user) {
         if (user != null) {
             return getProperName(user.getFirstName(), user.getLastName(), user.getUserName());
         }
@@ -93,7 +90,7 @@ public final class DictionBotEngine {
         return noResult[rand.nextInt(noResult.length)].replace("xxxxxxxxxx", "<b>" + name + "</b>");
     }
 
-    public void onMessage(Message message) throws TelegramApiException {
+    void onMessage(Message message) throws TelegramApiException {
         if (message.getText() != null) {
             User sender = message.getFrom();
             String text = message.getText();
@@ -149,31 +146,33 @@ public final class DictionBotEngine {
         return dictionBuilder.toString();
     }
 
-    public void onInlineQuery(InlineQuery query) {
-        /*String wordToFind = query.getQuery();
+    void onInlineQuery(InlineQuery query) throws TelegramApiException {
+        String wordToFind = query.getQuery();
         if ((wordToFind != null) && (wordToFind.split("\\s+").length == 1) && (isValidText(wordToFind))) {
             DictionWord wordMatch = dictionService.getDictionWord(wordToFind);
             if (wordMatch != null) {
-                ArrayList<DictionWord.DictionDesc> descriptions = wordMatch.getDescriptions();
-                InlineQueryResult[] results = new InlineQueryResult[descriptions.size()];
+                List<DictionWord.DictionDesc> descriptions = wordMatch.getDescriptions();
+                List<InlineQueryResult> inlineQueryResults = new ArrayList<>();
                 for (int i = 0; i < descriptions.size(); i++) {
                     String id = "desc-" + i;
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
-                    String text = "<b>" + wordToFind + "</b> <i>(" + descriptions.get(i).getWordType() + ")</i> - " + descriptions.get(i).getDescription()
-                            + "\n\n" + helpUsHTMLWithLink;
-                    InputTextMessageContent inputTextMessageContent = new InputTextMessageContent(text);
-                    inputTextMessageContent.setParse_mode(ParseMode.HTML);
+                    String text = "<b>" + wordToFind + "</b> <i>(" + descriptions.get(i).getWordType() + ")</i> - " + descriptions.get(i).getDescription();
+                    InputTextMessageContent inputTextMessageContent = new InputTextMessageContent();
+                    inputTextMessageContent.setMessageText(text);
+                    inputTextMessageContent.setParseMode(ParseMode.HTML);
                     inputTextMessageContent.disableWebPagePreview();
-                    InlineQueryResultArticle article = new InlineQueryResultArticle(id, title, inputTextMessageContent);
-                    results[i] = article;
+                    InlineQueryResultArticle article = new InlineQueryResultArticle();
+                    article.setId(id);
+                    article.setTitle(title);
+                    article.setInputMessageContent(inputTextMessageContent);
+                    inlineQueryResults.add(article);
                 }
-                try {
-                    bot().answerInlineQuery(query.getId(), results);
-                } catch (IOException e) {
-                    logger.throwing(this.getClass().getName(), "onInlineQuery", e);
-                }
+                AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery();
+                answerInlineQuery.setInlineQueryId(query.getId());
+                answerInlineQuery.setResults(inlineQueryResults);
+                bot.execute(answerInlineQuery);
             }
-        }*/
+        }
     }
 
 }
