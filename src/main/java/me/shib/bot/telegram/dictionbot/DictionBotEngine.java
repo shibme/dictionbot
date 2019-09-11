@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQuery
 import org.telegram.telegrambots.meta.api.objects.inlinequery.result.InlineQueryResultArticle;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -146,13 +147,13 @@ final class DictionBotEngine {
         return dictionBuilder.toString();
     }
 
-    void onInlineQuery(InlineQuery query) throws TelegramApiException {
+    void onInlineQuery(InlineQuery query) throws TelegramApiException, UnsupportedEncodingException {
         String wordToFind = query.getQuery();
         if ((wordToFind != null) && (wordToFind.split("\\s+").length == 1) && (isValidText(wordToFind))) {
             DictionWord wordMatch = dictionService.getDictionWord(wordToFind);
+            List<InlineQueryResult> inlineQueryResults = new ArrayList<>();
             if (wordMatch != null) {
                 List<DictionWord.DictionDesc> descriptions = wordMatch.getDescriptions();
-                List<InlineQueryResult> inlineQueryResults = new ArrayList<>();
                 for (int i = 0; i < descriptions.size(); i++) {
                     String id = "desc-" + i;
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
@@ -167,11 +168,21 @@ final class DictionBotEngine {
                     article.setInputMessageContent(inputTextMessageContent);
                     inlineQueryResults.add(article);
                 }
-                AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery();
-                answerInlineQuery.setInlineQueryId(query.getId());
-                answerInlineQuery.setResults(inlineQueryResults);
-                bot.execute(answerInlineQuery);
+            } else {
+                InlineQueryResultArticle inlineQueryResult = new InlineQueryResultArticle();
+                inlineQueryResult.setId("notfound");
+                inlineQueryResult.setTitle("No Results Found!");
+                InputTextMessageContent inputTextMessageContent = new InputTextMessageContent();
+                inputTextMessageContent.setMessageText("Unable to find any results for <b>" + wordToFind + "</b>");
+                inputTextMessageContent.setParseMode(ParseMode.HTML);
+                inputTextMessageContent.disableWebPagePreview();
+                inlineQueryResult.setInputMessageContent(inputTextMessageContent);
+                inlineQueryResults.add(inlineQueryResult);
             }
+            AnswerInlineQuery answerInlineQuery = new AnswerInlineQuery();
+            answerInlineQuery.setInlineQueryId(query.getId());
+            answerInlineQuery.setResults(inlineQueryResults);
+            bot.execute(answerInlineQuery);
         }
     }
 

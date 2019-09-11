@@ -4,6 +4,8 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import java.io.UnsupportedEncodingException;
+
 public final class DictionBot extends TelegramLongPollingBot {
 
     private transient String telegramBotToken;
@@ -27,7 +29,7 @@ public final class DictionBot extends TelegramLongPollingBot {
         } else if (update.getInlineQuery() != null) {
             try {
                 updateHandler.onInlineQuery(update.getInlineQuery());
-            } catch (TelegramApiException e) {
+            } catch (TelegramApiException | UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
         }
