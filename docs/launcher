@@ -2,13 +2,25 @@
 DOCKER_VERSION_RESPONSE=$(docker -v)
 EXPECTED_RESPONSE="Docker version "
 if test "${DOCKER_VERSION_RESPONSE#*$EXPECTED_RESPONSE}" != "$DOCKER_VERSION_RESPONSE"; then
+  #Setting env from arguments
+  if [ ! -z "$1" ]; then
+    export TELEGRAM_BOT_TOKEN="$1"
+  fi
+  if [ ! -z "$2" ]; then
+    export DICTIONBOT_CONTAINER="$2"
+  fi
+
+  #Setting default container name if not set
+  if [ -z "$DICTIONBOT_CONTAINER" ]; then
+    export DICTIONBOT_CONTAINER="dictionbot-container"
+  fi
   echo "Attempting to kill any running docker instances of DictionBot..."
-  docker kill dictionbot-container
+  docker kill $DICTIONBOT_CONTAINER
   echo "Attempting to remove any docker instances of DictionBot..."
-  docker rm dictionbot-container
+  docker rm $DICTIONBOT_CONTAINER
   docker pull shibme/dictionbot
-  echo "Running container: dictionbot-container"
-  docker run -e TELEGRAM_BOT_TOKEN --name dictionbot-container shibme/dictionbot
+  echo "Starting container: $DICTIONBOT_CONTAINER"
+  docker run -e TELEGRAM_BOT_TOKEN --name $DICTIONBOT_CONTAINER --restart always -d shibme/dictionbot
 else
   echo "Please install docker client before you begin."
 fi
