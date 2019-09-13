@@ -10,6 +10,7 @@ variables:
 stages:
   - "Maven Build"
   - "Docker Build"
+  - "Deployment"
 
 Building Executable JAR:
   image: maven:3-jdk-8
@@ -24,5 +25,11 @@ Building Docker Image:
   stage: "Docker Build"
   script:
     - sh docker-builder
+  only:
+    - master
+
+DictionBot Deployment:
+  stage: "Deployment"
+  trigger: shibme/dictionbot-deployment
   only:
     - master
