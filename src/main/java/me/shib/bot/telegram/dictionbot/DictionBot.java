@@ -100,6 +100,7 @@ final class DictionBot {
         if (replyToMessageId != null) {
             sendMessage.setReplyToMessageId(replyToMessageId);
         }
+        sendMessage.disableWebPagePreview();
         return sendMessage;
     }
 
