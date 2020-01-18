@@ -148,6 +148,14 @@ final class DictionBot {
         }
     }
 
+    private String wordToRefUrl(String word, String linkText) {
+        return "<a href=\"https://t.me/" + botUser.getUserName() + "?start=" + word + "\">" + linkText + "</a>";
+    }
+
+    private String wordToRefUrl(String word) {
+        return wordToRefUrl(word, word);
+    }
+
     private String getHypononymsFooter(DictionWord dictionWord) {
         StringBuilder hypononymsFooter = new StringBuilder();
         List<String> hyponyms = dictionWord.getHyponyms();
@@ -158,9 +166,7 @@ final class DictionBot {
                 limit = maxHypononyms;
             }
             for (int i = 0; i < limit; i++) {
-                String hyponymsUrl = "https://t.me/" + botUser.getUserName() + "?start=" + hyponyms.get(i);
-                hypononymsFooter.append("<i><a href=\"").append(hyponymsUrl).append("\">")
-                        .append(hyponyms.get(i)).append("</a>").append("</i>");
+                hypononymsFooter.append("<i>").append(wordToRefUrl(hyponyms.get(i))).append("</i>");
                 if (i < (limit - 1)) {
                     hypononymsFooter.append(" - ");
                 }
@@ -196,8 +202,9 @@ final class DictionBot {
                 for (int i = 0; i < descriptions.size(); i++) {
                     String id = "desc-" + i;
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
-                    String text = "<b>" + wordToFind + "</b> <i>(" + descriptions.get(i).getWordType() +
-                            ")</i> - " + descriptions.get(i).getDescription() + getHypononymsFooter(wordMatch);
+                    String text = "<b>" + wordToRefUrl(wordToFind) + "</b> <i>(" + descriptions.get(i).getWordType() +
+                            ")</i> - " + descriptions.get(i).getDescription() + "\n\n<b>" +
+                            wordToRefUrl(wordToFind, "Show More Definitions") + "</b>\n" + getHypononymsFooter(wordMatch);
                     InputTextMessageContent inputTextMessageContent = new InputTextMessageContent();
                     inputTextMessageContent.setMessageText(text);
                     inputTextMessageContent.setParseMode(ParseMode.HTML);
