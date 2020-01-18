@@ -5,7 +5,7 @@ final class DictionBotConfig {
     private static final String telegramBotTokenEnv = "TELEGRAM_BOT_TOKEN";
     private static final String telegramBotWebHookUrlEnv = "TELEGRAM_BOT_WEBHOOK_URL";
     private static final int port = 3428;
-    private static final String localUrl = "http://localhost:" + port;
+    private static final String localUrl = "http://0.0.0.0:" + port;
 
     private static DictionBotConfig dictionBotConfig;
 
