@@ -6,13 +6,11 @@ if test "${DOCKER_VERSION_RESPONSE#*$EXPECTED_RESPONSE}" != "$DOCKER_VERSION_RES
   if [ -z "$DICTIONBOT_CONTAINER" ]; then
     export DICTIONBOT_CONTAINER="dictionbot-container"
   fi
-  echo "Attempting to kill any running docker instances of DictionBot..."
-  docker kill $DICTIONBOT_CONTAINER
-  echo "Attempting to remove any docker instances of DictionBot..."
-  docker rm $DICTIONBOT_CONTAINER
+  echo "Attempting to stop and remove any instances of DictionBot..."
+  docker stop $DICTIONBOT_CONTAINER || true && docker rm $DICTIONBOT_CONTAINER || true
   docker pull shibme/dictionbot
-  echo "Starting container: $DICTIONBOT_CONTAINER"
-  docker run -e TELEGRAM_BOT_TOKEN --name $DICTIONBOT_CONTAINER --restart always -d shibme/dictionbot
+  echo "Starting: $DICTIONBOT_CONTAINER"
+  docker run -e TELEGRAM_BOT_TOKEN -e TELEGRAM_BOT_WEBHOOK_URL -p 3428:3428 --name $DICTIONBOT_CONTAINER --restart always -d shibme/dictionbot
 else
   echo "Please install docker client before you begin."
 fi

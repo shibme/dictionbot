@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 docker build -t shibme/dictionbot .
-docker tag shibme/dictionbot shibme/dictionbot:1.4.1
 docker push shibme/dictionbot
 docker logout

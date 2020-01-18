@@ -5,4 +5,5 @@ WORKDIR dictionbot-workspace
 RUN apk update && apk upgrade
 RUN apk add openjdk8-jre
 ADD /target/dictionbot-runner.jar /dictionbot-workspace/dictionbot-runner.jar
+EXPOSE 3428
 CMD ["java", "-jar", "dictionbot-runner.jar"]
