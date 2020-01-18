@@ -1,5 +1,6 @@
 package me.shib.bot.telegram.dictionbot;
 
+import com.google.gson.Gson;
 import me.shib.java.lib.diction.DictionService;
 import me.shib.java.lib.diction.DictionWord;
 import org.telegram.telegrambots.bots.DefaultAbsSender;
@@ -24,6 +25,8 @@ import java.util.Random;
 
 final class DictionBot {
 
+    private static final int maxHypononyms = 20;
+    private static final Gson gson = new Gson();
     private static final String invalidMessageResponse = "Please send a valid word to search the dictionary";
     private static final String[] noResult = {"Sorry xxxxxxxxxx, looks like I have a lot to learn.",
             "Please accept my apology, xxxxxxxxxx. I don't know what that means.",
@@ -33,10 +36,12 @@ final class DictionBot {
             "If that's really an english word I should have found it by now. I guess I'm not that good enough."};
 
     private transient DefaultAbsSender bot;
+    private transient User botUser;
     private transient DictionService dictionService;
 
-    DictionBot(DefaultAbsSender bot) {
+    DictionBot(DefaultAbsSender bot) throws TelegramApiException {
         this.bot = bot;
+        this.botUser = this.bot.getMe();
         this.dictionService = new DictionService();
     }
 
@@ -69,6 +74,7 @@ final class DictionBot {
     }
 
     BotApiMethod onUpdate(Update update) {
+        System.out.println("Update: " + gson.toJson(update));
         if (update.getMessage() != null) {
             try {
                 return onMessage(update.getMessage());
@@ -97,8 +103,8 @@ final class DictionBot {
         return sendMessage;
     }
 
-    private boolean isValidText(String text) {
-        return text != null && text.matches("^[A-Za-z0-9]+$");
+    private boolean isValidWord(String word) {
+        return word != null && word.matches("^[A-Za-z0-9]+$");
     }
 
     private String getNoResultMessage(String name) {
@@ -112,26 +118,54 @@ final class DictionBot {
             String text = message.getText();
             if (text.equalsIgnoreCase("/start") || text.equalsIgnoreCase("/help")) {
                 return sendMessage(message.getChatId(), "Hi <b>" + getProperName(sender) + "</b>. My name is <b>"
-                        + getProperName(bot.getMe()) + "</b>. Just type in any <b>English word</b> and I'll " +
+                        + getProperName(botUser) + "</b>. Just type in any <b>English word</b> and I'll " +
                         "try to give you the best possible definition/description.", message.getMessageId());
             } else {
-                if ((text.split("\\s+").length > 1) || !isValidText(text)) {
-                    return sendMessage(message.getChatId(), "Hello <b>" + getProperName(message.getFrom()) +
-                                    "</b>, please send a single english word that doesn't have any special characters.",
-                            message.getMessageId());
-                } else {
-                    DictionWord wordMatch = dictionService.getDictionWord(text);
+                String word = null;
+                if (text.toLowerCase().startsWith("/start") && text.split("\\s+").length == 2) {
+                    word = text.split("\\s+")[1];
+                } else if (text.split("\\s+").length == 1) {
+                    word = text;
+                }
+                if (isValidWord(word)) {
+                    DictionWord wordMatch = dictionService.getDictionWord(word);
                     if (wordMatch != null) {
-                        return sendMessage(message.getChatId(), toHTMLFormatting(wordMatch), message.getMessageId());
+                        return sendMessage(message.getChatId(), toHTMLFormatting(wordMatch),
+                                message.getMessageId());
                     } else {
                         return sendMessage(message.getChatId(), getNoResultMessage(getProperName(message.getFrom())),
                                 message.getMessageId());
                     }
+                } else {
+                    return sendMessage(message.getChatId(), "Hello <b>" + getProperName(message.getFrom()) +
+                                    "</b>, please send a single english word that doesn't have any special characters.",
+                            message.getMessageId());
                 }
             }
         } else {
             return sendMessage(message.getChatId(), invalidMessageResponse, message.getMessageId());
         }
+    }
+
+    private String getHypononymsFooter(DictionWord dictionWord) {
+        StringBuilder hypononymsFooter = new StringBuilder();
+        List<String> hyponyms = dictionWord.getHyponyms();
+        if (hyponyms.size() > 0) {
+            hypononymsFooter.append("\n<b>Related words:").append("\n</b>");
+            int limit = hyponyms.size();
+            if (limit > maxHypononyms) {
+                limit = maxHypononyms;
+            }
+            for (int i = 0; i < limit; i++) {
+                String hyponymsUrl = "https://t.me/" + botUser.getUserName() + "?start=" + hyponyms.get(i);
+                hypononymsFooter.append("<i><a href=\"").append(hyponymsUrl).append("\">")
+                        .append(hyponyms.get(i)).append("</a>").append("</i>");
+                if (i < (limit - 1)) {
+                    hypononymsFooter.append(" - ");
+                }
+            }
+        }
+        return hypononymsFooter.toString();
     }
 
     private String toHTMLFormatting(DictionWord dictionWord) {
@@ -144,17 +178,7 @@ final class DictionBot {
                         .append(" - ").append(description.getDescription()).append("\n");
             }
         }
-        List<String> hyponyms = dictionWord.getHyponyms();
-        if (hyponyms.size() > 0) {
-            dictionBuilder.append("\n<b>Related words:").append("\n</b>");
-            for (int i = 0; i < hyponyms.size(); i++) {
-                dictionBuilder.append("<i>").append(hyponyms.get(i)).append("</i>");
-                if (i < (hyponyms.size() - 1)) {
-                    dictionBuilder.append(" - ");
-                }
-            }
-            dictionBuilder.append("\n");
-        }
+        dictionBuilder.append(getHypononymsFooter(dictionWord));
         if (dictionBuilder.toString().isEmpty()) {
             return null;
         }
@@ -163,7 +187,7 @@ final class DictionBot {
 
     private BotApiMethod onInlineQuery(InlineQuery query) {
         String wordToFind = query.getQuery();
-        if ((wordToFind != null) && (wordToFind.split("\\s+").length == 1) && (isValidText(wordToFind))) {
+        if ((wordToFind != null) && (wordToFind.split("\\s+").length == 1) && (isValidWord(wordToFind))) {
             DictionWord wordMatch = dictionService.getDictionWord(wordToFind);
             List<InlineQueryResult> inlineQueryResults = new ArrayList<>();
             if (wordMatch != null) {
@@ -171,7 +195,8 @@ final class DictionBot {
                 for (int i = 0; i < descriptions.size(); i++) {
                     String id = "desc-" + i;
                     String title = descriptions.get(i).getWordType() + " - " + descriptions.get(i).getDescription();
-                    String text = "<b>" + wordToFind + "</b> <i>(" + descriptions.get(i).getWordType() + ")</i> - " + descriptions.get(i).getDescription();
+                    String text = "<b>" + wordToFind + "</b> <i>(" + descriptions.get(i).getWordType() +
+                            ")</i> - " + descriptions.get(i).getDescription() + getHypononymsFooter(wordMatch);
                     InputTextMessageContent inputTextMessageContent = new InputTextMessageContent();
                     inputTextMessageContent.setMessageText(text);
                     inputTextMessageContent.setParseMode(ParseMode.HTML);
