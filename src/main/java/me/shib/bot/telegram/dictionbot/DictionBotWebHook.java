@@ -34,6 +34,6 @@ public class DictionBotWebHook extends TelegramWebhookBot {
 
     @Override
     public String getBotPath() {
-        return null;
+        return getBotUsername();
     }
 }
