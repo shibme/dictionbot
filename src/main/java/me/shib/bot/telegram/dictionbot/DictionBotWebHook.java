@@ -8,11 +8,13 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 public class DictionBotWebHook extends TelegramWebhookBot {
 
     private transient String telegramBotToken;
+    private transient String telegramBotPath;
     private transient String botUsername;
     private transient DictionBot dictionBot;
 
     public DictionBotWebHook() throws TelegramApiException {
         this.telegramBotToken = DictionBotConfig.getConfig().getBotToken();
+        this.telegramBotPath = DictionBotConfig.getConfig().getWebHookBotPath();
         this.botUsername = getMe().getUserName();
         this.dictionBot = new DictionBot(this);
     }
@@ -34,6 +36,6 @@ public class DictionBotWebHook extends TelegramWebhookBot {
 
     @Override
     public String getBotPath() {
-        return getBotUsername();
+        return this.telegramBotPath;
     }
 }
