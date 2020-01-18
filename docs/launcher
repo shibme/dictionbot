@@ -15,6 +15,7 @@ if test "${DOCKER_VERSION_RESPONSE#*$EXPECTED_RESPONSE}" != "$DOCKER_VERSION_RES
     DICTIONBOT_RUN_COMMAND="$DICTIONBOT_RUN_COMMAND -e TELEGRAM_BOT_WEBHOOK_URL -p 3428:3428"
   fi
   DICTIONBOT_RUN_COMMAND="$DICTIONBOT_RUN_COMMAND --name $DICTIONBOT_CONTAINER --restart always -d shibme/dictionbot"
+  echo $DICTIONBOT_RUN_COMMAND | bash
 else
   echo "Please install docker client before you begin."
 fi
