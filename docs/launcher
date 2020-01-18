@@ -10,7 +10,11 @@ if test "${DOCKER_VERSION_RESPONSE#*$EXPECTED_RESPONSE}" != "$DOCKER_VERSION_RES
   docker stop $DICTIONBOT_CONTAINER || true && docker rm $DICTIONBOT_CONTAINER || true
   docker pull shibme/dictionbot
   echo "Starting: $DICTIONBOT_CONTAINER"
-  docker run -e TELEGRAM_BOT_TOKEN -e TELEGRAM_BOT_WEBHOOK_URL -p 3428:3428 --name $DICTIONBOT_CONTAINER --restart always -d shibme/dictionbot
+  DICTIONBOT_RUN_COMMAND="docker run -e TELEGRAM_BOT_TOKEN"
+  if [ ! -z "$TELEGRAM_BOT_WEBHOOK_URL" ]; then
+    DICTIONBOT_RUN_COMMAND="$DICTIONBOT_RUN_COMMAND -e TELEGRAM_BOT_WEBHOOK_URL -p 3428:3428"
+  fi
+  DICTIONBOT_RUN_COMMAND="$DICTIONBOT_RUN_COMMAND --name $DICTIONBOT_CONTAINER --restart always -d shibme/dictionbot"
 else
   echo "Please install docker client before you begin."
 fi
