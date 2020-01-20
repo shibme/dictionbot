@@ -8,28 +8,28 @@ variables:
   MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 stages:
-  - "Maven Build"
-  - "Docker Build"
-  - "Deployment"
+  - "Build"
+  - "Release"
+  - "Deploy"
 
-Building Executable JAR:
+Java Build:
   image: maven:3-jdk-8
-  stage: "Maven Build"
+  stage: "Build"
   script: mvn clean install
   artifacts:
     expire_in: 1 hour
     paths:
       - target/dictionbot-runner.jar
 
-Building Docker Image:
-  stage: "Docker Build"
+Docker Image Release:
+  stage: "Release"
   script:
     - sh docker-builder
   only:
     - master
 
 DictionBot Deployment:
-  stage: "Deployment"
+  stage: "Deploy"
   trigger: shibme/dictionbot-deployment
   only:
     - master

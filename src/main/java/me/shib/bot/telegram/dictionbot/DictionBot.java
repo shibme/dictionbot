@@ -50,20 +50,16 @@ final class DictionBot {
     }
 
     private static String getProperName(String firstName, String lastName, String username) {
-        StringBuilder nameBuilder = new StringBuilder();
         if (isValidName(firstName)) {
-            nameBuilder.append(firstName);
+            return firstName;
         }
         if (isValidName(lastName)) {
-            if (!nameBuilder.toString().isEmpty()) {
-                nameBuilder.append(" ");
-            }
-            nameBuilder.append(lastName);
+            return lastName;
         }
-        if (nameBuilder.toString().isEmpty() && isValidName(username)) {
-            nameBuilder.append(username);
+        if (isValidName(username)) {
+            return username;
         }
-        return nameBuilder.toString();
+        return null;
     }
 
     private static String getProperName(User user) {
@@ -108,9 +104,14 @@ final class DictionBot {
         return word != null && word.matches("^[A-Za-z0-9]+$");
     }
 
-    private String getNoResultMessage(String name) {
+    private String getNoResultMessage(String word, String name) {
         Random rand = new Random();
-        return noResult[rand.nextInt(noResult.length)].replace("xxxxxxxxxx", "<b>" + name + "</b>");
+        if (name == null || name.isEmpty()) {
+            name = "my friend";
+        } else {
+            name = "<b>" + name + "</b>";
+        }
+        return "<b>" + word + ":</b>\n" + noResult[rand.nextInt(noResult.length)].replace("xxxxxxxxxx", name);
     }
 
     private BotApiMethod onMessage(Message message) throws TelegramApiException {
@@ -134,7 +135,7 @@ final class DictionBot {
                         return sendMessage(message.getChatId(), toHTMLFormatting(wordMatch),
                                 message.getMessageId());
                     } else {
-                        return sendMessage(message.getChatId(), getNoResultMessage(getProperName(message.getFrom())),
+                        return sendMessage(message.getChatId(), getNoResultMessage(word, getProperName(message.getFrom())),
                                 message.getMessageId());
                     }
                 } else {
