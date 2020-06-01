@@ -1,8 +1,6 @@
-FROM alpine
+FROM openjdk:11-jre-slim
 LABEL maintainer="shibme"
-RUN mkdir dictionbot-workspace
-WORKDIR dictionbot-workspace
-RUN apk add --no-cache openjdk8-jre
-ADD /target/dictionbot-runner.jar /dictionbot-workspace/dictionbot-runner.jar
+WORKDIR dictionbot
+ADD /target/dictionbot-runner.jar /dictionbot/dictionbot-runner.jar
 EXPOSE 3428
-CMD ["java", "-jar", "dictionbot-runner.jar"]
+ENTRYPOINT ["java", "-jar", "dictionbot-runner.jar"]
