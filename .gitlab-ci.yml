@@ -4,27 +4,20 @@ services:
 
 variables:
   DOCKER_DRIVER: overlay
-  MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
-  MAVEN_OPTS: "-Dmaven.repo.local=.m2/repository"
 
 stages:
   - "Build"
-  - "Release"
   - "Deploy"
 
-Java Build:
-  image: maven:3-jdk-8
-  stage: "Build"
-  script: mvn clean install
-  artifacts:
-    expire_in: 1 hour
-    paths:
-      - target/dictionbot-runner.jar
-
 Docker Image Release:
-  stage: "Release"
+  stage: "Build"
+  variables:
+    DOCKER_USERNAME: $DOCKERHUB_USERNAME
+    DOCKER_PASSWORD: $DOCKERHUB_TOKEN
   script:
-    - sh docker-builder
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+    - docker buildx build -t shibme/dictionbot --platform linux/amd64,linux/arm64,linux/arm/v7 --push .
+    - docker logout
   only:
     - master
 
