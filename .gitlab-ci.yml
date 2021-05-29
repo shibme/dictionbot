@@ -15,7 +15,7 @@ Java Build:
   artifacts:
     expire_in: 1 hour
     paths:
-      - target/dictionbot-runner.jar
+      - target/dictionbot-jar-with-dependencies.jar
 
 Releasing Docker Image:
   image: shibme/docker-buildx
