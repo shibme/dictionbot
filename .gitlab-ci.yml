@@ -1,7 +1,3 @@
-image: docker:latest
-services:
-  - docker:dind
-
 variables:
   DOCKER_DRIVER: overlay
   MAVEN_CLI_OPTS: "-s .m2/settings.xml --batch-mode"
@@ -13,7 +9,7 @@ stages:
   - "Deploy"
 
 Java Build:
-  image: maven:3-jdk-8
+  image: maven:3-jdk-11
   stage: "Build"
   script: mvn clean install
   artifacts:
@@ -21,12 +17,33 @@ Java Build:
     paths:
       - target/dictionbot-runner.jar
 
-Docker Image Release:
+Releasing Docker Image:
+  image: shibme/docker-buildx
+  services:
+    - docker:dind
   stage: "Release"
+  variables:
+    DOCKER_HOST: tcp://docker:2375/
+    ECR_PUBLIC_REGISTRY: "public.ecr.aws"
+    DOCKERHUB_IMAGE: "$CI_PROJECT_PATH"
+    ECR_PUBLIC_IMAGE: "$ECR_PUBLIC_REGISTRY/$CI_PROJECT_PATH"
+  before_script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u "$CI_REGISTRY_USER" --password-stdin $CI_REGISTRY
+    - echo "$DOCKERHUB_TOKEN" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+    - docker run -e AWS_ACCESS_KEY_ID -e AWS_SECRET_ACCESS_KEY amazon/aws-cli ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin $ECR_PUBLIC_REGISTRY
+    - docker buildx create --driver docker-container --use
+    - docker buildx inspect --bootstrap
   script:
-    - sh docker-builder
+    - docker buildx build --platform linux/amd64,linux/arm/v7,linux/arm64/v8 -t "$CI_REGISTRY_IMAGE" --push .
+    - docker buildx build --platform linux/amd64,linux/arm/v7,linux/arm64/v8 -t "$DOCKERHUB_IMAGE" --push .
+    - docker buildx build --platform linux/amd64,linux/arm/v7,linux/arm64/v8 -t "$ECR_PUBLIC_IMAGE" --push .
+  after_script:
+    - docker logout
+    - docker logout $ECR_PUBLIC_REGISTRY
+    - docker logout $CI_REGISTRY
   only:
     - master
+
 
 DictionBot Deployment:
   stage: "Deploy"
