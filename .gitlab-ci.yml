@@ -18,6 +18,7 @@ Releasing Docker Image:
     - docker:dind
   stage: "Release"
   variables:
+    BUILD_PLATFORMS: "linux/amd64,linux/arm64/v8,linux/arm/v7"
     DOCKER_HOST: tcp://docker:2375/
     ECR_PUBLIC_REGISTRY: "public.ecr.aws"
     DOCKERHUB_IMAGE: "$CI_PROJECT_PATH"
@@ -29,9 +30,9 @@ Releasing Docker Image:
     - docker buildx create --driver docker-container --use
     - docker buildx inspect --bootstrap
   script:
-    - docker buildx build --platform linux/amd64,linux/arm/v7,linux/arm64/v8 -t "$CI_REGISTRY_IMAGE" --push .
-    - docker buildx build --platform linux/amd64,linux/arm/v7,linux/arm64/v8 -t "$DOCKERHUB_IMAGE" --push .
-    - docker buildx build --platform linux/amd64,linux/arm/v7,linux/arm64/v8 -t "$ECR_PUBLIC_IMAGE" --push .
+    - docker buildx build --platform $BUILD_PLATFORMS -t "$CI_REGISTRY_IMAGE" --push .
+    - docker buildx build --platform $BUILD_PLATFORMS -t "$DOCKERHUB_IMAGE" --push .
+    - docker buildx build --platform $BUILD_PLATFORMS -t "$ECR_PUBLIC_IMAGE" --push .
   after_script:
     - docker logout
     - docker logout $ECR_PUBLIC_REGISTRY
