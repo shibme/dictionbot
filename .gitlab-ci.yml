@@ -30,6 +30,7 @@ Releasing Docker Image:
     - docker buildx create --driver docker-container --use
     - docker buildx inspect --bootstrap
   script:
+    - update-binfmts --enable
     - docker buildx build --platform $BUILD_PLATFORMS -t "$CI_REGISTRY_IMAGE" --push .
     - docker buildx build --platform $BUILD_PLATFORMS -t "$DOCKERHUB_IMAGE" --push .
     - docker buildx build --platform $BUILD_PLATFORMS -t "$ECR_PUBLIC_IMAGE" --push .
