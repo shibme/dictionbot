@@ -11,9 +11,9 @@ final class DictionBotConfig {
 
     private static DictionBotConfig dictionBotConfig;
 
-    private String botToken;
-    private String webHookUrl;
-    private String webHookBotPath;
+    private final String botToken;
+    private final String webHookUrl;
+    private final String webHookBotPath;
 
     private DictionBotConfig() {
         this.webHookUrl = System.getenv(telegramBotWebHookUrlEnv);

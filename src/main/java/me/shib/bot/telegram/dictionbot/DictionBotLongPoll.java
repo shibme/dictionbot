@@ -7,9 +7,9 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public final class DictionBotLongPoll extends TelegramLongPollingBot {
 
-    private transient String telegramBotToken;
-    private transient String botUsername;
-    private transient DictionBot dictionBot;
+    private final transient String telegramBotToken;
+    private final transient String botUsername;
+    private final transient DictionBot dictionBot;
 
     DictionBotLongPoll() throws TelegramApiException {
         this.telegramBotToken = DictionBotConfig.getConfig().getBotToken();

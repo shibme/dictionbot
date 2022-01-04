@@ -35,9 +35,9 @@ final class DictionBot {
             "Sorry xxxxxxxxxx, I couldn't figure it out.",
             "If that's really an english word I should have found it by now. I guess I'm not that good enough."};
 
-    private transient DefaultAbsSender bot;
-    private transient User botUser;
-    private transient DictionService dictionService;
+    private final transient DefaultAbsSender bot;
+    private final transient User botUser;
+    private final transient DictionService dictionService;
 
     DictionBot(DefaultAbsSender bot) throws TelegramApiException {
         this.bot = bot;
@@ -84,15 +84,18 @@ final class DictionBot {
     }
 
     private void sendTypingAction(Long chatId) throws TelegramApiException {
-        SendChatAction sendChatAction = new SendChatAction().setAction(ActionType.TYPING).setChatId(chatId);
+        SendChatAction sendChatAction = new SendChatAction();
+        sendChatAction.setChatId(chatId + "");
+        sendChatAction.setAction(ActionType.TYPING);
         bot.execute(sendChatAction);
     }
 
     private BotApiMethod sendMessage(Long chatId, String text, Integer replyToMessageId) throws TelegramApiException {
         sendTypingAction(chatId);
-        SendMessage sendMessage = new SendMessage().setText(text)
-                .setParseMode(ParseMode.HTML)
-                .setChatId(chatId);
+        SendMessage sendMessage = new SendMessage();
+        sendMessage.setText(text);
+        sendMessage.setParseMode(ParseMode.HTML);
+        sendMessage.setChatId(chatId + "");
         if (replyToMessageId != null) {
             sendMessage.setReplyToMessageId(replyToMessageId);
         }
@@ -195,7 +198,7 @@ final class DictionBot {
 
     private BotApiMethod onInlineQuery(InlineQuery query) {
         String wordToFind = query.getQuery();
-        if ((wordToFind != null) && (wordToFind.split("\\s+").length == 1) && (isValidWord(wordToFind))) {
+        if ((wordToFind.split("\\s+").length == 1) && (isValidWord(wordToFind))) {
             DictionWord wordMatch = dictionService.getDictionWord(wordToFind);
             List<InlineQueryResult> inlineQueryResults = new ArrayList<>();
             if (wordMatch != null) {
@@ -209,7 +212,7 @@ final class DictionBot {
                     InputTextMessageContent inputTextMessageContent = new InputTextMessageContent();
                     inputTextMessageContent.setMessageText(text);
                     inputTextMessageContent.setParseMode(ParseMode.HTML);
-                    inputTextMessageContent.disableWebPagePreview();
+                    inputTextMessageContent.setDisableWebPagePreview(true);
                     InlineQueryResultArticle article = new InlineQueryResultArticle();
                     article.setId(id);
                     article.setTitle(title);
@@ -223,7 +226,7 @@ final class DictionBot {
                 InputTextMessageContent inputTextMessageContent = new InputTextMessageContent();
                 inputTextMessageContent.setMessageText("Unable to find any results for <b>" + wordToFind + "</b>");
                 inputTextMessageContent.setParseMode(ParseMode.HTML);
-                inputTextMessageContent.disableWebPagePreview();
+                inputTextMessageContent.setDisableWebPagePreview(true);
                 inlineQueryResult.setInputMessageContent(inputTextMessageContent);
                 inlineQueryResults.add(inlineQueryResult);
             }
