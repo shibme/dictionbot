@@ -1,22 +1,12 @@
 stages:
   - "Build"
-  - "Release"
   - "Deploy"
-
-Java Build:
-  image: maven:3-jdk-11
-  stage: "Build"
-  script: mvn clean install
-  artifacts:
-    expire_in: 1 hour
-    paths:
-      - target/dictionbot-jar-with-dependencies.jar
 
 Releasing Docker Image:
   image: shibme/docker-buildx
   services:
     - docker:dind
-  stage: "Release"
+  stage: "Build"
   variables:
     BUILD_PLATFORMS: "linux/amd64,linux/arm64/v8"
     DOCKER_HOST: tcp://docker:2375/
@@ -39,11 +29,11 @@ Releasing Docker Image:
     - docker logout $ECR_PUBLIC_REGISTRY
     - docker logout $CI_REGISTRY
   only:
-    - master
+    - main
 
 
 DictionBot Deployment:
   stage: "Deploy"
   trigger: shibme/dictionbot-deployment
   only:
-    - master
+    - main
