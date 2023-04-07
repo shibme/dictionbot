@@ -22,7 +22,7 @@ func (dictionBot *DictionBot) getIntroMessageText() (introMessage string) {
 
 func (dictionBot *DictionBot) Init(telegramBotApiToken string) (err error) {
 	if telegramBotApiToken == "" {
-		err = errors.New("Please provide a valid Bot API Token")
+		err = errors.New("please provide a valid bot token")
 		return
 	}
 	dictionBot.bot, err = telegramBot.NewBotAPI(telegramBotApiToken)
