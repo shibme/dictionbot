@@ -1,5 +1,5 @@
 # DictionBot
-[![Build Status](https://gitlab.com/shibme/dictionbot/badges/master/pipeline.svg)](https://gitlab.com/shibme/dictionbot/pipelines)
+[![Build Status](https://gitlab.com/shibme/dictionbot/badges/main/pipeline.svg)](https://gitlab.com/shibme/dictionbot/pipelines)
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/shibme/dictionbot.svg)](http://isitmaintained.com/project/shibme/dictionbot "Percentage of issues still open")
 
 Telegram's [@DictionBot](https://telegram.me/DictionBot) - A simple English dictionary that describes most words
