@@ -58,13 +58,17 @@ func (dictionBot *DictionBot) sendTypingAction(chatID int64) {
 	dictionBot.bot.Send(telegramBot.NewChatAction(chatID, telegramBot.ChatTyping))
 }
 
+func (dictionBot *DictionBot) sendTextMessage(chatID int64, text string, replyToMessageId int) (telegramBot.Message, error) {
+	msg := telegramBot.NewMessage(chatID, text)
+	msg.ReplyToMessageID = replyToMessageId
+	msg.ParseMode = telegramBot.ModeHTML
+	msg.DisableWebPagePreview = true
+	return dictionBot.bot.Send(msg)
+}
+
 func (dictionBot *DictionBot) onTextMessage(message telegramBot.Message) {
 	if message.Text == "" {
-		msg := telegramBot.NewMessage(message.Chat.ID,
-			"Please send a valid <b>text</b> message")
-		msg.ReplyToMessageID = message.MessageID
-		msg.ParseMode = telegramBot.ModeHTML
-		dictionBot.bot.Send(msg)
+		dictionBot.sendTextMessage(message.Chat.ID, "Please send a valid <b>text</b> message", message.MessageID)
 	} else {
 		dictionBot.processTextMessage(message)
 	}
@@ -107,18 +111,18 @@ func (dictionBot *DictionBot) processTextMessage(message telegramBot.Message) {
 	dictionBot.sendTypingAction(message.Chat.ID)
 	if message.IsCommand() {
 		if message.CommandArguments() == "" {
-			msg := telegramBot.NewMessage(message.Chat.ID, "")
-			msg.ReplyToMessageID = message.MessageID
-			msg.ParseMode = telegramBot.ModeHTML
 			switch message.Command() {
 			case "start":
-				msg.Text = dictionBot.getIntroMessageText()
+				dictionBot.sendTextMessage(message.Chat.ID,
+					dictionBot.getIntroMessageText(), message.MessageID)
 			case "help":
-				msg.Text = dictionBot.getIntroMessageText()
+				dictionBot.sendTextMessage(message.Chat.ID,
+					dictionBot.getIntroMessageText(), message.MessageID)
 			default:
-				msg.Text = "Invalid command. Please use /start or /help to know about me."
+				dictionBot.sendTextMessage(message.Chat.ID,
+					"Invalid command. Please use /start or /help to know about me.",
+					message.MessageID)
 			}
-			dictionBot.bot.Send(msg)
 		} else {
 			dictionBot.processWords(message, message.CommandArguments())
 		}
@@ -130,11 +134,9 @@ func (dictionBot *DictionBot) processTextMessage(message telegramBot.Message) {
 func (dictionBot *DictionBot) processWords(message telegramBot.Message, text string) {
 	dictions, limitExceeded := GetDictions(text)
 	if limitExceeded {
-		msg := telegramBot.NewMessage(message.Chat.ID,
-			"Can't process more than <b>"+strconv.Itoa(maxWordsPerText)+"</b> words in a single message")
-		msg.ReplyToMessageID = message.MessageID
-		msg.ParseMode = telegramBot.ModeHTML
-		dictionBot.bot.Send(msg)
+		dictionBot.sendTextMessage(message.Chat.ID,
+			"Can't process more than <b>"+strconv.Itoa(maxWordsPerText)+"</b> words in a single message",
+			message.MessageID)
 	} else {
 		for _, diction := range dictions {
 			if diction.valid {
@@ -145,23 +147,16 @@ func (dictionBot *DictionBot) processWords(message telegramBot.Message, text str
 						msgTextBuilder.WriteString("\n\n" + "<u>" + desc.pos + "</u>\t<code>" + desc.description + "</code>")
 					}
 					msgTextBuilder.WriteString(dictionBot.getRelatedWordsFooter(diction))
-					msg := telegramBot.NewMessage(message.Chat.ID, msgTextBuilder.String())
-					msg.ReplyToMessageID = message.MessageID
-					msg.ParseMode = telegramBot.ModeHTML
-					dictionBot.bot.Send(msg)
+					dictionBot.sendTextMessage(message.Chat.ID,
+						msgTextBuilder.String(), message.MessageID)
 				} else {
-					msg := telegramBot.NewMessage(message.Chat.ID,
-						"No results found for <b>"+diction.word+"</b>")
-					msg.ReplyToMessageID = message.MessageID
-					msg.ParseMode = telegramBot.ModeHTML
-					dictionBot.bot.Send(msg)
+					dictionBot.sendTextMessage(message.Chat.ID,
+						"No results found for <b>"+diction.word+"</b>", message.MessageID)
 				}
 			} else {
-				msg := telegramBot.NewMessage(message.Chat.ID,
-					"Please avoid looking up something invalid, such as [<b>"+diction.word+"</b>]")
-				msg.ReplyToMessageID = message.MessageID
-				msg.ParseMode = telegramBot.ModeHTML
-				dictionBot.bot.Send(msg)
+				dictionBot.sendTextMessage(message.Chat.ID,
+					"Please avoid looking up something invalid, such as [<b>"+diction.word+"</b>]",
+					message.MessageID)
 			}
 		}
 	}
@@ -180,7 +175,12 @@ func (dictionBot *DictionBot) onInlineQuery(inlineQuery telegramBot.InlineQuery)
 		title := desc.pos + " - " + desc.description
 		text := "<b>" + dictionBot.getRefURL(diction.word, diction.word) + "</b> <i>[<u>" + desc.pos + "</u>]</i>\t<code>" +
 			desc.description + "</code>\n\n<b>" + dictionBot.getRefURL(diction.word, "Show All") + "</b>"
-		article := telegramBot.NewInlineQueryResultArticleHTML(id, title, text)
+		article := telegramBot.NewInlineQueryResultArticle(id, title, text)
+		article.InputMessageContent = telegramBot.InputTextMessageContent{
+			Text:                  text,
+			ParseMode:             "HTML",
+			DisableWebPagePreview: true,
+		}
 		inlineQueryResults = append(inlineQueryResults, article)
 	}
 	if len(inlineQueryResults) == 0 {
