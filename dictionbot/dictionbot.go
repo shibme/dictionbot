@@ -165,11 +165,11 @@ func (dictionBot *DictionBot) getRefURL(word, hyperlinkText string) string {
 }
 
 func (dictionBot *DictionBot) onInlineQuery(inlineQuery telegramBot.InlineQuery) {
-	text := inlineQuery.Query
-	diction := GetDiction(text)
+	searchQuery := inlineQuery.Query
+	diction := GetDiction(searchQuery)
 	inlineQueryResults := make([]interface{}, 0)
 	for i, desc := range diction.descriptions {
-		id := "dictionbot_desc_" + strconv.Itoa(i)
+		id := "dictionbot_" + strconv.Itoa(i)
 		title := desc.pos + " - " + desc.description
 		text := "<b>" + dictionBot.getRefURL(diction.word, diction.word) + "</b> <i>[<u>" + desc.pos + "</u>]</i>\t<code>" +
 			desc.description + "</code>\n\n<b>" + dictionBot.getRefURL(diction.word, "Show All") + "</b>"
@@ -182,11 +182,17 @@ func (dictionBot *DictionBot) onInlineQuery(inlineQuery telegramBot.InlineQuery)
 		inlineQueryResults = append(inlineQueryResults, article)
 	}
 	if len(inlineQueryResults) == 0 {
-		id := "no_result"
-		title := "No Results Found!"
-		text := "No results found for <b>" + text + "</b>"
-		article := telegramBot.NewInlineQueryResultArticleHTML(id, title, text)
-		inlineQueryResults = append(inlineQueryResults, article)
+		if searchQuery == "" {
+			id := "dictionbot_intro"
+			title := "Enter a word to search"
+			text := dictionBot.getIntroMessageText()
+			inlineQueryResults = append(inlineQueryResults, telegramBot.NewInlineQueryResultArticleHTML(id, title, text))
+		} else {
+			id := "dictionbot_no_result"
+			title := "No Results Found!"
+			text := "No results found for <b>" + searchQuery + "</b>"
+			inlineQueryResults = append(inlineQueryResults, telegramBot.NewInlineQueryResultArticleHTML(id, title, text))
+		}
 	}
 	answer := telegramBot.InlineConfig{
 		InlineQueryID: inlineQuery.ID,
