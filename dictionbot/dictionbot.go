@@ -21,14 +21,12 @@ func (dictionBot *DictionBot) getIntroMessageText() (introMessage string) {
 }
 
 func (dictionBot *DictionBot) Init(telegramBotApiToken string) (err error) {
-	if telegramBotApiToken == "" {
-		err = errors.New("please provide a valid bot token")
+	dictionBot.bot, err = telegramBot.NewBotAPI(telegramBotApiToken)
+	if err != nil {
+		err = errors.New("unable to connect to telegram - please ensure that you provide a valid token")
 		return
 	}
-	dictionBot.bot, err = telegramBot.NewBotAPI(telegramBotApiToken)
-	if err == nil {
-		dictionBot.self = dictionBot.bot.Self
-	}
+	dictionBot.self = dictionBot.bot.Self
 	return
 }
 
