@@ -2,9 +2,9 @@ package wordnet
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
-	"io"
-	"os"
+	"log"
 	"path/filepath"
 	"strconv"
 	"strings"
@@ -37,20 +37,23 @@ var (
 	exampleIndexFile = "sentidx.vrb"
 )
 
+func getReader(fileName string) *bytes.Reader {
+	filePath := filepath.Join("dict", fileName)
+	data, err := Asset(filePath)
+	if err != nil {
+		log.Fatalf("%v: %v", fileName, err)
+	}
+	return bytes.NewReader(data)
+}
+
 // ----- LEMMA INDEX PARSING --------------------------------------------------
 
 // Parses the index files.
-func parseIndexFiles(path string) (map[string][]string, error) {
+func parseIndexFiles() (map[string][]string, error) {
 	result := map[string][]string{}
 
 	for _, file := range indexFiles {
-		// Read index file.
-		f, err := os.Open(filepath.Join(path, file))
-		if err != nil {
-			return nil, fmt.Errorf("%v: %v", file, err)
-		}
-		m, err := parseIndex(f)
-		f.Close()
+		m, err := parseIndex(file)
 		if err != nil {
 			return nil, fmt.Errorf("%v: %v", file, err)
 		}
@@ -65,9 +68,9 @@ func parseIndexFiles(path string) (map[string][]string, error) {
 }
 
 // Parses the contents of an index file.
-func parseIndex(r io.Reader) (map[string][]string, error) {
+func parseIndex(fileName string) (map[string][]string, error) {
 	result := map[string][]string{}
-	scanner := bufio.NewScanner(r)
+	scanner := bufio.NewScanner(getReader(fileName))
 
 	lineNum := 0
 	for scanner.Scan() {
@@ -151,20 +154,10 @@ func parseIndexLine(line string) (*indexLine, error) {
 
 // ----- VERB EXAMPLE PARSING -------------------------------------------------
 
-// Parses the verb example file.
-func parseExampleFile(path string) (map[string]string, error) {
-	f, err := os.Open(filepath.Join(path, exampleFile))
-	if err != nil {
-		return nil, fmt.Errorf("%s: %v", exampleFile, err)
-	}
-	defer f.Close()
-	return parseExamples(f)
-}
-
 // Parses a verb example file.
-func parseExamples(r io.Reader) (map[string]string, error) {
+func parseExamples() (map[string]string, error) {
 	result := map[string]string{}
-	scanner := bufio.NewScanner(r)
+	scanner := bufio.NewScanner(getReader(exampleFile))
 
 	lineNum := 0
 	for scanner.Scan() {
@@ -183,20 +176,10 @@ func parseExamples(r io.Reader) (map[string]string, error) {
 	return result, nil
 }
 
-// Parses the verb example index file.
-func parseExampleIndexFile(path string) (map[string][]int, error) {
-	f, err := os.Open(filepath.Join(path, exampleIndexFile))
-	if err != nil {
-		return nil, fmt.Errorf("%s: %v", exampleIndexFile, err)
-	}
-	defer f.Close()
-	return parseExampleIndex(f)
-}
-
 // Parses an entire verb example index file.
-func parseExampleIndex(r io.Reader) (map[string][]int, error) {
+func parseExampleIndex() (map[string][]int, error) {
 	result := map[string][]int{}
-	scanner := bufio.NewScanner(r)
+	scanner := bufio.NewScanner(getReader(exampleIndexFile))
 
 	lineNum := 0
 	for scanner.Scan() {
@@ -290,15 +273,10 @@ func parseExampleIndexLine(line string) (*rawExampleIndex, error) {
 
 // ----- EXCEPTION PARSING ----------------------------------------------------
 
-func parseExceptionFiles(path string) (map[string][]string, error) {
+func parseExceptionFiles() (map[string][]string, error) {
 	result := map[string][]string{}
 	for file, pos := range exceptionFiles {
-		f, err := os.Open(filepath.Join(path, file))
-		if err != nil {
-			return nil, fmt.Errorf("%s: %v", file, err)
-		}
-		err = parseExceptionFile(f, pos, result)
-		f.Close()
+		err := parseExceptionFile(file, pos, result)
 		if err != nil {
 			return nil, fmt.Errorf("%s: %v", file, err)
 		}
@@ -308,9 +286,9 @@ func parseExceptionFiles(path string) (map[string][]string, error) {
 
 // Parses a single exception file. Adds keys to out that point to already
 // existing values.
-func parseExceptionFile(in io.Reader, pos string, out map[string][]string,
+func parseExceptionFile(fileName, pos string, out map[string][]string,
 ) error {
-	scanner := bufio.NewScanner(in)
+	scanner := bufio.NewScanner(getReader(fileName))
 
 	// For each line.
 	lineNum := 0
@@ -337,16 +315,11 @@ func parseExceptionFile(in io.Reader, pos string, out map[string][]string,
 // Parses all the data files and returns the 'Synset' field for the Wordnet
 // object. Path is data root directory. Example is a map from word sense to
 // example IDs.
-func parseDataFiles(path string, examples map[string][]int) (
+func parseDataFiles(examples map[string][]int) (
 	map[string]*Synset, error) {
 	result := map[string]*Synset{}
 	for file, pos := range dataFiles {
-		f, err := os.Open(filepath.Join(path, file))
-		if err != nil {
-			return nil, fmt.Errorf("%s: %v", file, err)
-		}
-		err = parseDataFile(f, pos, examples, result)
-		f.Close()
+		err := parseDataFile(file, pos, examples, result)
 		if err != nil {
 			return nil, fmt.Errorf("%s: %v", file, err)
 		}
@@ -357,9 +330,9 @@ func parseDataFiles(path string, examples map[string][]int) (
 // Parses a single data file. Path is the data file. Pos is the POS that this
 // file represents. Example is a map from word sense to example IDs. Updates
 // out with parsed data.
-func parseDataFile(in io.Reader, pos string, examples map[string][]int,
+func parseDataFile(fileName, pos string, examples map[string][]int,
 	out map[string]*Synset) error {
-	scanner := bufio.NewScanner(in)
+	scanner := bufio.NewScanner(getReader(fileName))
 
 	// For each line.
 	lineNum := 0

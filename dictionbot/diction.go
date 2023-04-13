@@ -9,7 +9,7 @@ import (
 
 var maxRelatedWords = 20
 var maxWordsPerText = 10
-var wn, _ = wordnet.Parse("./assets/dict/")
+var wn, _ = wordnet.New()
 var spacesRegex = regexp.MustCompile(`\s+`)
 var validWordRegex = regexp.MustCompile(`^[A-Za-z0-9]+$`)
 var posMap = map[string]string{

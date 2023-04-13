@@ -54,30 +54,30 @@ import (
 // Parse parses an entire WordNet directory. Path is the root of the directory.
 // The parser will trverse it and parse the required files, assuming
 // directory structure is as published.
-func Parse(path string) (*WordNet, error) {
+func New() (*WordNet, error) {
 	result := &WordNet{}
 	var err error
 
-	result.Example, err = parseExampleFile(path)
+	result.Example, err = parseExamples()
 	if err != nil {
 		// Older versions of the database don't have examples, so skipping if
 		// not found.
 		result.Example = map[string]string{}
 	}
 
-	examples, err := parseExampleIndexFile(path)
+	examples, err := parseExampleIndex()
 	if err != nil {
 		// Older versions of the database don't have examples, so skipping if
 		// not found.
 		examples = map[string][]int{}
 	}
 
-	result.Synset, err = parseDataFiles(path, examples)
+	result.Synset, err = parseDataFiles(examples)
 	if err != nil {
 		return nil, err
 	}
 
-	result.Exception, err = parseExceptionFiles(path)
+	result.Exception, err = parseExceptionFiles()
 	if err != nil {
 		// Older versions of the database don't have exceptions, so skipping if
 		// not found.
@@ -86,7 +86,7 @@ func Parse(path string) (*WordNet, error) {
 
 	result.indexLemma()
 
-	result.LemmaRanked, err = parseIndexFiles(path)
+	result.LemmaRanked, err = parseIndexFiles()
 	if err != nil {
 		return nil, err
 	}

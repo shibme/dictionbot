@@ -7,10 +7,18 @@ import (
 	"github.com/shibme/dictionbot/dictionbot"
 )
 
+var tokenEnvarName = "TELEGRAM_BOT_TOKEN"
+
 func main() {
-	token := os.Getenv("TELEGRAM_BOT_TOKEN")
+	var token string
+	if len(os.Args) > 1 {
+		token = os.Args[1]
+	}
 	if token == "" {
-		log.Panicln("please set a valid token through TELEGEAM_BOT_TOKEN environment variable")
+		token = os.Getenv(tokenEnvarName)
+	}
+	if token == "" {
+		log.Panicln("please set a valid token through " + tokenEnvarName + " environment variable")
 	}
 	var dictionBot dictionbot.DictionBot
 	err := dictionBot.Init(token)
