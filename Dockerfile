@@ -1,11 +1,9 @@
-FROM alpine
-ARG TARGETOS
+FROM alpine AS build-env
 ARG TARGETARCH
-ARG BINDIR
-WORKDIR /workspace
-COPY dist/ .
-RUN export BINDIR=$(ls | grep dictionbot_$TARGETOS | grep $TARGETARCH) && mv $BINDIR/dictionbot ./app
+WORKDIR /build
+COPY ./*.zip .
+RUN unzip $TARGETARCH.zip
 
 FROM cgr.dev/chainguard/static
-COPY --from=build-env /app /
-ENTRYPOINT ["/app"]
+COPY --from=build-env /build/dictionbot /dictionbot
+ENTRYPOINT ["/dictionbot"]
