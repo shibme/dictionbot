@@ -7,3 +7,5 @@ pom.xml.versionsBackup
 .idea
 *.iml
 dist/
+
+dist/

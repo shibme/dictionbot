@@ -1,8 +1,11 @@
-FROM golang AS build-env
-WORKDIR /build
-COPY . .
-RUN go build -a -tags 'osusergo netgo static_build' -ldflags '-w -extldflags "-static"' -o app
+FROM alpine
+ARG TARGETOS
+ARG TARGETARCH
+ARG BINDIR
+WORKDIR /workspace
+COPY dist/ .
+RUN export BINDIR=$(ls | grep dictionbot_$TARGETOS | grep $TARGETARCH) && mv $BINDIR/dictionbot ./app
 
 FROM cgr.dev/chainguard/static
-COPY --from=build-env /build/app /
+COPY --from=build-env /app /
 ENTRYPOINT ["/app"]
